@@ -2,7 +2,10 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111111;
+  --brand: #1fa37a;
+  --brand-dark: #0f766e;
+  --brand-soft: #d1fae5;
 }
 
 @theme inline {
@@ -12,15 +15,64 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
 }
+
+a {
+  color: var(--brand-dark);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Secondary header + header CTA: global `a` color must not override white */
+.secondary-ticker a,
+.secondary-ticker a:hover,
+.secondary-ticker a:focus-visible {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.secondary-ticker a:hover {
+  text-decoration: underline;
+}
+
+.secondary-ticker a sub {
+  color: inherit;
+}
+
+.primary-header-cta,
+.primary-header-cta:hover,
+.primary-header-cta:focus-visible {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.primary-header-cta:hover {
+  opacity: 0.94;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.glass-panel {
+  background: #ffffff;
+}
+

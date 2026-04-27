@@ -1,65 +1,199 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Link2 } from "lucide-react";
+import type { Metadata } from "next";
+
+import { FeaturedCompoundsList } from "@/components/sections/featured-compounds-list";
+import { FormulaWritingTips } from "@/components/sections/formula-writing-tips";
+import { HeroCalculator } from "@/components/sections/hero-calculator";
+import { HomeCompoundsTable } from "@/components/sections/home-compounds-table";
+import { HomeMolarMassGuide } from "@/components/sections/home-molar-mass-guide";
+import { Reveal } from "@/components/sections/reveal";
+import { StructuredData } from "@/components/sections/structured-data";
+import { FaqAccordion } from "@/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FormulaSub } from "@/components/ui/formula-sub";
+import { homeFaq } from "@/lib/home-faq";
+import { compounds, getCompoundHref, getHighVolumeMolarMassPageLinks } from "@/lib/compound-data";
+import { getInternalLink } from "@/lib/internal-links";
+
+const exploreMolarMassHub = getHighVolumeMolarMassPageLinks();
+const allCompoundsTableRows = [...compounds];
+const popularStudentSearches = exploreMolarMassHub.slice(0, 20);
+
+export const metadata: Metadata = {
+  title: "Molar Mass Calculator, Formula & Compound List Guide",
+  description:
+    "Calculate molar mass instantly with formula, calculator, and periodic table. Find molar mass of NaCl, H2O, CO2, NaOH and more compounds.",
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="bg-white text-[#0a0f1a]">
+      <StructuredData isHome />
+      <HeroCalculator />
+
+      <HomeMolarMassGuide />
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6" id="compounds-table">
+        <Reveal>
+          <Card className="bg-white">
+            <CardHeader>
+              <CardTitle>Common Molar Mass Reference Chart (All Compounds)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <HomeCompoundsTable compounds={allCompoundsTableRows} />
+            </CardContent>
+          </Card>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 py-6 sm:px-6" id="formula-format">
+        <Reveal>
+          <FormulaWritingTips />
+        </Reveal>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 pt-7 pb-6 sm:px-6" id="featured">
+        <h2 className="mb-5 text-[1.8rem] font-bold tracking-tight text-[#0a0f1a]">Featured compounds</h2>
+        <FeaturedCompoundsList />
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+        <Reveal>
+          <Card className="bg-white">
+            <CardHeader>
+              <CardTitle>Why Molar Mass Matters</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 text-base text-[#0a0f1a]">
+              <p>Students use molar mass to convert grams to moles in exam questions.</p>
+              <p>Lab work uses it to measure exact reactant amounts for accurate results.</p>
+              <p>It also helps check reaction balance and reduce calculation mistakes.</p>
+            </CardContent>
+          </Card>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+        <Reveal>
+          <Card className="border-slate-200/90 bg-white">
+            <CardHeader>
+              <CardTitle>How Molar Mass is Used in Real Life</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-base text-[#0a0f1a]">
+              <p>
+                In chemistry labs, students use molar mass to decide exact sample quantities before reactions start. For
+                example, preparing solutions for{" "}
+                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("NaCl")}>
+                  Sodium Chloride (<FormulaSub formula="NaCl" />)
+                </Link>{" "}
+                and{" "}
+                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("H2SO4")}>
+                  Sulfuric Acid (<FormulaSub formula="H2SO4" />)
+                </Link>{" "}
+                always depends on molar-mass accuracy.
+              </p>
+              <p>
+                In medicine and industry, measured compounds are converted between grams and moles to keep dosage and production
+                consistent. That is why molar mass is treated as a core skill, not just an exam topic.
+              </p>
+            </CardContent>
+          </Card>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+        <Reveal>
+          <Card className="border-slate-200/90 bg-white">
+            <CardHeader>
+              <CardTitle>Popular Compounds Students Search</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="grid grid-cols-1 gap-x-10 gap-y-2 text-base md:grid-cols-2">
+                {popularStudentSearches.map((item) => (
+                  <li key={`popular-${item.formula}`}>
+                    <Link
+                      className="text-[#0a0f1a] underline-offset-2 hover:text-[#0F766E] hover:underline"
+                      href={getCompoundHref(item.formula)}
+                      prefetch={false}
+                    >
+                      {item.name} (<FormulaSub formula={item.formula} />)
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+        <Reveal>
+          <Card className="border-slate-200/90 bg-white">
+            <CardHeader>
+              <CardTitle>Beginner Chemistry Guide</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-base text-[#0a0f1a]">
+              <p>
+                New to molar mass? Read the{" "}
+                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getInternalLink("home")}>
+                  short definition
+                </Link>
+                , work through the{" "}
+                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getInternalLink("home")}>
+                  step-by-step guide
+                </Link>
+                , then try{" "}
+                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("H2O")}>
+                  Water (<FormulaSub formula="H2O" />)
+                </Link>
+                ,{" "}
+                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("CO2")}>
+                  Carbon dioxide (<FormulaSub formula="CO2" />)
+                </Link>
+                , or{" "}
+                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("NaCl")}>
+                  Sodium chloride (<FormulaSub formula="NaCl" />)
+                </Link>{" "}
+                from the chart above.
+              </p>
+            </CardContent>
+          </Card>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+        <Reveal>
+        <Card className="border-slate-200/90 bg-white">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-[17px]">
+              <Link2 className="h-5 w-5 shrink-0 text-[#0F766E]" aria-hidden />
+              Popular molar mass lookup pages &amp; formulas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {exploreMolarMassHub.map(({ formula, name }) => (
+                <li key={formula}>
+                  <Link
+                    className="text-[#0a0f1a] underline-offset-2 hover:text-[#0F766E] hover:underline"
+                    href={getCompoundHref(formula)}
+                    prefetch={false}
+                  >
+                    {name} (<FormulaSub formula={formula} />)
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 pb-9 sm:px-6" id="faq">
+        <h2 className="mb-4 text-2xl font-bold tracking-tight text-[#0a0f1a]">FAQ</h2>
+        <FaqAccordion items={homeFaq} />
+      </section>
+    </main>
   );
 }
