@@ -324,8 +324,8 @@ export function CompoundPage({ compound }: CompoundPageProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  <div className="overflow-x-auto rounded-lg border border-slate-200/90 bg-white px-4 py-5 sm:px-5 sm:py-6">
-                    <p className="break-words text-3xl font-bold tracking-tight text-[#0F766E] sm:text-4xl sm:whitespace-nowrap md:text-5xl lg:text-6xl">
+                  <div className="min-w-0 rounded-lg border border-slate-200/90 bg-white px-4 py-5 sm:px-5 sm:py-6">
+                    <p className="break-words text-3xl font-bold tracking-tight text-[#0F766E] max-md:whitespace-normal sm:text-4xl md:text-5xl md:whitespace-nowrap lg:text-6xl">
                       {compound.molarMass.toFixed(2)} g/mol
                     </p>
                   </div>
@@ -344,35 +344,41 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 <CardTitle>Element Breakdown Table</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="max-w-full overflow-x-auto rounded-lg border border-slate-200">
-                  <Table className="min-w-[36rem]">
+                <div className="min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 [-webkit-overflow-scrolling:touch] [&_sub]:text-[0.7em] [&_td]:px-1.5 [&_td]:py-1 sm:[&_td]:px-2 sm:[&_td]:py-1.5 [&_th]:px-1.5 [&_th]:py-1.5 sm:[&_th]:px-2 sm:[&_th]:py-2">
+                  <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-snug sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Element</TableHead>
-                        <TableHead>Count</TableHead>
-                        <TableHead>Atomic Mass</TableHead>
-                        <TableHead>Calculation</TableHead>
-                        <TableHead>Contribution</TableHead>
+                        <TableHead className="w-[22%] min-w-0 normal-case tracking-tight">Element</TableHead>
+                        <TableHead className="w-10 text-center tabular-nums normal-case tracking-tight sm:w-11">Count</TableHead>
+                        <TableHead className="w-[16%] min-w-0 text-right normal-case tracking-tight sm:w-[14%]">
+                          Atomic mass
+                        </TableHead>
+                        <TableHead className="min-w-0 normal-case tracking-tight">Calculation</TableHead>
+                        <TableHead className="w-[22%] min-w-0 text-right normal-case tracking-tight sm:w-[20%]">
+                          Contribution
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {compound.breakdown.map((row) => (
                         <TableRow key={row.element}>
-                          <TableCell>{getElementDisplay(row.element)}</TableCell>
-                          <TableCell>{row.count}</TableCell>
-                          <TableCell>{row.atomicMass.toFixed(2)}</TableCell>
-                          <TableCell className="tabular-nums">
-                            {row.count} x {row.atomicMass.toFixed(2)}
+                          <TableCell className="min-w-0 break-words leading-snug">{getElementDisplay(row.element)}</TableCell>
+                          <TableCell className="text-center tabular-nums">{row.count}</TableCell>
+                          <TableCell className="text-right tabular-nums">{row.atomicMass.toFixed(2)}</TableCell>
+                          <TableCell className="tabular-nums leading-snug">{row.count} x {row.atomicMass.toFixed(2)}</TableCell>
+                          <TableCell className="text-right tabular-nums leading-snug break-words">
+                            {row.contribution.toFixed(2)} g/mol
                           </TableCell>
-                          <TableCell>{row.contribution.toFixed(2)} g/mol</TableCell>
                         </TableRow>
                       ))}
-                      <TableRow>
-                        <TableCell className="font-semibold">Final molar mass</TableCell>
-                        <TableCell>-</TableCell>
-                        <TableCell>-</TableCell>
-                        <TableCell className="font-semibold tabular-nums">{perElementSum}</TableCell>
-                        <TableCell className="font-semibold text-[#0F766E]">{compound.molarMass.toFixed(2)} g/mol</TableCell>
+                      <TableRow className="border-t-2 border-slate-200/90 bg-[#f8fafc] hover:bg-[#f1f5f9]">
+                        <TableCell colSpan={4}>
+                          <div className="font-semibold leading-snug text-[#0a0f1a]">Final molar mass</div>
+                          <div className="mt-0.5 font-normal leading-snug tabular-nums text-[#0a0f1a]/80">{perElementSum}</div>
+                        </TableCell>
+                        <TableCell className="text-right font-semibold leading-snug text-[#0F766E] tabular-nums break-words">
+                          {compound.molarMass.toFixed(2)} g/mol
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
@@ -439,7 +445,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                   </div>
                 </div>
 
-                <div className="overflow-x-auto rounded-lg border border-slate-200/90 bg-white p-4 text-center sm:p-5">
+                <div className="min-w-0 rounded-lg border border-slate-200/90 bg-white p-4 text-center sm:p-5">
                   <p className="min-w-0 whitespace-normal break-words text-base leading-relaxed tabular-nums sm:text-lg">
                     Molar Mass = ({groupedTerm})
                   </p>
@@ -456,35 +462,43 @@ export function CompoundPage({ compound }: CompoundPageProps) {
 
                 <div className="rounded-lg border border-slate-200/90 bg-white p-4 sm:p-5">
                   <h3 className="text-lg font-semibold">Visual Calculation Chart</h3>
-                  <div className="mt-3 max-w-full overflow-x-auto rounded-lg border border-slate-200">
-                    <Table className="min-w-[40rem]">
+                  <div className="mt-3 min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 [-webkit-overflow-scrolling:touch] [&_sub]:text-[0.7em] [&_td]:px-1.5 [&_td]:py-1 sm:[&_td]:px-2 sm:[&_td]:py-1.5 [&_th]:px-1.5 [&_th]:py-1.5 sm:[&_th]:px-2 sm:[&_th]:py-2">
+                    <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-snug sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Element</TableHead>
-                          <TableHead>Count</TableHead>
-                          <TableHead>Mass</TableHead>
-                          <TableHead>Count x Mass</TableHead>
-                          <TableHead>Contribution</TableHead>
+                          <TableHead className="w-[22%] min-w-0 normal-case tracking-tight">Element</TableHead>
+                          <TableHead className="w-10 text-center normal-case tracking-tight sm:w-11">Count</TableHead>
+                          <TableHead className="w-[14%] min-w-0 text-right normal-case tracking-tight sm:w-[12%]">
+                            Mass
+                          </TableHead>
+                          <TableHead className="min-w-0 normal-case tracking-tight">Count x mass</TableHead>
+                          <TableHead className="w-[22%] min-w-0 text-right normal-case tracking-tight sm:w-[20%]">
+                            Contribution
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {compound.breakdown.map((row) => (
                           <TableRow key={`visual-${row.element}`}>
-                            <TableCell>{getElementDisplay(row.element)}</TableCell>
-                            <TableCell>{row.count}</TableCell>
-                            <TableCell>{row.atomicMass.toFixed(3)}</TableCell>
-                            <TableCell className="tabular-nums">
+                            <TableCell className="min-w-0 break-words leading-snug">{getElementDisplay(row.element)}</TableCell>
+                            <TableCell className="text-center tabular-nums">{row.count}</TableCell>
+                            <TableCell className="text-right tabular-nums">{row.atomicMass.toFixed(3)}</TableCell>
+                            <TableCell className="tabular-nums leading-snug">
                               {row.count} x {row.atomicMass.toFixed(3)}
                             </TableCell>
-                            <TableCell className="tabular-nums">= {row.contribution.toFixed(3)}</TableCell>
+                            <TableCell className="text-right tabular-nums leading-snug break-words">
+                              = {row.contribution.toFixed(3)}
+                            </TableCell>
                           </TableRow>
                         ))}
-                        <TableRow>
-                          <TableCell className="font-semibold">Final molar mass</TableCell>
-                          <TableCell>-</TableCell>
-                          <TableCell>-</TableCell>
-                          <TableCell className="font-semibold tabular-nums">{perElementSum}</TableCell>
-                          <TableCell className="font-semibold text-[#0F766E] tabular-nums">= {compound.molarMass.toFixed(3)}</TableCell>
+                        <TableRow className="border-t-2 border-slate-200/90 bg-[#f8fafc] hover:bg-[#f1f5f9]">
+                          <TableCell colSpan={4}>
+                            <div className="font-semibold leading-snug text-[#0a0f1a]">Final molar mass</div>
+                            <div className="mt-0.5 font-normal leading-snug tabular-nums text-[#0a0f1a]/80">{perElementSum}</div>
+                          </TableCell>
+                          <TableCell className="text-right font-semibold leading-snug text-[#0F766E] tabular-nums break-words">
+                            = {compound.molarMass.toFixed(3)}
+                          </TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -526,21 +540,19 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 <CardTitle>Sample Reactions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="max-w-full overflow-x-auto rounded-lg border border-slate-200">
-                  <Table className="min-w-[20rem]">
+                <div className="min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 [-webkit-overflow-scrolling:touch] [&_sub]:text-[0.7em] [&_td]:px-1.5 [&_td]:py-1 sm:[&_td]:px-2 sm:[&_td]:py-2">
+                  <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-snug sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Reaction</TableHead>
+                        <TableHead className="w-[26%] normal-case tracking-tight sm:w-[22%]">Type</TableHead>
+                        <TableHead className="min-w-0 normal-case tracking-tight">Reaction</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {compound.reactions.map((reaction) => (
                         <TableRow key={`${reaction.type}-${reaction.equation}`}>
-                          <TableCell className="whitespace-nowrap">{reaction.type}</TableCell>
-                          <TableCell className="max-w-[min(100vw,28rem)] break-words sm:max-w-none">
-                            {formatFormula(reaction.equation)}
-                          </TableCell>
+                          <TableCell className="font-medium text-[#0a0f1a]">{reaction.type}</TableCell>
+                          <TableCell className="min-w-0">{formatFormula(reaction.equation)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -590,15 +602,17 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                   <p>
                     Similar calculations can be compared with{" "}
                     <Link
-                      className="text-[#0F766E] underline-offset-2 hover:underline"
+                      className="text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
                       href={getCompoundHref(firstRelated.formula)}
+                      prefetch={false}
                     >
                       {firstRelated.name} (<FormulaSub formula={firstRelated.formula} />)
                     </Link>{" "}
                     and{" "}
                     <Link
-                      className="text-[#0F766E] underline-offset-2 hover:underline"
+                      className="text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
                       href={getCompoundHref(secondRelated.formula)}
+                      prefetch={false}
                     >
                       {secondRelated.name} (<FormulaSub formula={secondRelated.formula} />)
                     </Link>
@@ -711,7 +725,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                     {relatedLabels.map((item) => (
                       <li key={item.formula}>
                         <Link
-                          className="text-[#0a0f1a] underline-offset-2 hover:text-[#0F766E] hover:underline"
+                          className="text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
                           href={getCompoundHref(item.formula)}
                           prefetch={false}
                         >
@@ -727,7 +741,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                     {sameElementLabels.map((item) => (
                       <li key={item.formula}>
                         <Link
-                          className="text-[#0a0f1a] underline-offset-2 hover:text-[#0F766E] hover:underline"
+                          className="text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
                           href={getCompoundHref(item.formula)}
                           prefetch={false}
                         >
@@ -815,7 +829,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 {popularSidebarLinks.map(({ formula, name }) => (
                   <Link
                     key={formula}
-                    className="block text-[#0a0f1a] underline-offset-2 hover:text-[#0F766E] hover:underline"
+                    className="block text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
                     href={getCompoundHref(formula)}
                     prefetch={false}
                   >

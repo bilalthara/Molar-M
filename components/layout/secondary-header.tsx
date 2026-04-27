@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { FormulaSub } from "@/components/ui/formula-sub";
+import { cn } from "@/lib/utils";
 import { getCompoundHref, getSubheaderTickerFormulas } from "@/lib/compound-data";
 
 const tickerFormulas = getSubheaderTickerFormulas(100);
@@ -14,6 +16,7 @@ const tickerScrollBtnClass =
   "flex shrink-0 cursor-pointer rounded border border-white/45 p-1 text-white transition-colors hover:bg-white/12";
 
 export function SecondaryHeader() {
+  const pathname = usePathname();
   const [primaryHidden, setPrimaryHidden] = useState(false);
   const tickerRef = useRef<HTMLDivElement>(null);
 
@@ -53,23 +56,30 @@ export function SecondaryHeader() {
       className={`secondary-ticker z-[45] w-full border-b border-emerald-950/15 bg-[#1FA37A] max-md:fixed max-md:left-0 max-md:right-0 md:sticky ${primaryHidden ? "top-0 max-md:top-0" : "top-16 max-md:top-16"}`}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 sm:gap-4 sm:px-6">
-        {primaryHidden ? (
-          <Link
-            aria-label="Molar Mass Lab home"
-            className="group shrink-0 cursor-pointer self-center py-0.5"
-            href="/"
-            prefetch={false}
-          >
-            <Image
-              alt=""
-              aria-hidden
-              className="h-6 w-auto max-w-[7.5rem] object-contain object-left brightness-0 invert transition-opacity duration-150 group-hover:opacity-90 md:h-7 md:max-w-[9rem]"
-              height={28}
-              src="/molar-mass-lab-logo-v2.webp"
-              width={140}
-            />
-          </Link>
-        ) : null}
+        <Link
+          aria-label="Molar Mass Lab home"
+          className="group relative z-[1] shrink-0 cursor-pointer self-center py-0.5"
+          href="/"
+          onClick={(event) => {
+            if (pathname === "/") {
+              event.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          prefetch={false}
+        >
+          <Image
+            alt=""
+            aria-hidden
+            className={cn(
+              "h-5 w-auto max-w-[6rem] object-contain object-left brightness-0 invert transition-opacity duration-150 group-hover:opacity-90 sm:max-w-[6.5rem] md:h-6 md:max-w-[7.25rem]",
+              primaryHidden && "h-6 max-w-[7.5rem] md:h-7 md:max-w-[9rem]",
+            )}
+            height={28}
+            src="/molar-mass-lab-logo-v2.webp"
+            width={140}
+          />
+        </Link>
         <button
           aria-label="Scroll ticker left"
           className={tickerScrollBtnClass}

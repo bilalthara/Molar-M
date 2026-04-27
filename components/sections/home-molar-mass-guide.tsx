@@ -16,6 +16,9 @@ export function HomeMolarMassGuide() {
         </Link>
         .
       </p>
+      <p className="mb-4 text-sm leading-relaxed text-[#0a0f1a]/80">
+        Calculate molar mass quickly, review the element-by-element breakdown, and open compound pages for worked examples.
+      </p>
       <div className="space-y-6">
         <Reveal>
           <Card className="border-slate-200/90 bg-white">
@@ -62,21 +65,6 @@ export function HomeMolarMassGuide() {
                 <FormulaSub formula="Ca(OH)2" /> → (1 × Ca) + (2 × O) + (2 × H)
               </p>
               <p>Parentheses indicate that all atoms inside the group are multiplied by the subscript outside.</p>
-            </CardContent>
-          </Card>
-        </Reveal>
-
-        <Reveal>
-          <Card className="border-slate-200/90 bg-white" id="molar-mass-definition">
-            <CardHeader>
-              <h2 className="text-xl font-bold tracking-tight text-[#0a0f1a] sm:text-2xl">What is Molar Mass?</h2>
-            </CardHeader>
-            <CardContent className="space-y-3 text-base leading-relaxed text-[#0a0f1a]">
-              <p>Molar mass is the mass of one mole of a substance. It is expressed in grams per mole (g/mol).</p>
-              <p>
-                It acts as a conversion factor between grams and moles, allowing you to convert between the amount of a
-                substance and its mass.
-              </p>
             </CardContent>
           </Card>
         </Reveal>
@@ -129,17 +117,29 @@ export function HomeMolarMassGuide() {
             <CardContent className="text-base leading-relaxed text-[#0a0f1a]">
               <ul className="list-disc space-y-2 pl-5">
                 <li>
-                  <Link className="font-medium text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("NaCl")} prefetch={false}>
+                  <Link
+                    className="font-medium text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
+                    href={getCompoundHref("NaCl")}
+                    prefetch={false}
+                  >
                     Sodium chloride (<FormulaSub formula="NaCl" />)
                   </Link>
                 </li>
                 <li>
-                  <Link className="font-medium text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("H2O")} prefetch={false}>
+                  <Link
+                    className="font-medium text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
+                    href={getCompoundHref("H2O")}
+                    prefetch={false}
+                  >
                     Water (<FormulaSub formula="H2O" />)
                   </Link>
                 </li>
                 <li>
-                  <Link className="font-medium text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("CO2")} prefetch={false}>
+                  <Link
+                    className="font-medium text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
+                    href={getCompoundHref("CO2")}
+                    prefetch={false}
+                  >
                     Carbon dioxide (<FormulaSub formula="CO2" />)
                   </Link>
                 </li>

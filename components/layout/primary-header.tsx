@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -17,6 +17,7 @@ const coreNavLinks = [
 
 export function PrimaryHeader() {
   const router = useRouter();
+  const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -53,7 +54,18 @@ export function PrimaryHeader() {
       )}
     >
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link className="group flex cursor-pointer items-center text-[#0a0f1a] transition-colors duration-150" href="/">
+        <Link
+          aria-label="Molar Mass Lab home"
+          className="group relative z-[1] flex cursor-pointer items-center text-[#0a0f1a] transition-colors duration-150"
+          href="/"
+          onClick={(event) => {
+            if (pathname === "/") {
+              event.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          prefetch={false}
+        >
           <Image
             alt="MolarMass logo"
             className="h-9 w-auto object-contain"

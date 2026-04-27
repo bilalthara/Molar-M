@@ -113,34 +113,40 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200">
-        <div className={fullPage ? "overflow-auto" : "max-h-[28rem] overflow-auto"}>
-          <Table>
-            <TableHeader className="sticky top-0 z-10 bg-white">
+      <div className="min-w-0 overflow-hidden rounded-lg border border-slate-200">
+        <div
+          className={
+            fullPage
+              ? "min-w-0 overflow-x-auto overflow-y-visible"
+              : "max-h-[28rem] min-w-0 overflow-x-auto overflow-y-auto overscroll-contain"
+          }
+        >
+          <Table className="w-full min-w-0 table-fixed text-left text-[10px] leading-snug text-[#0F172A] sm:text-xs md:text-sm [&_sub]:text-[0.7em] [&_td]:font-normal [&_th]:font-semibold [&_th]:normal-case [&_th]:tracking-normal">
+            <TableHeader className="sticky top-0 z-10 bg-white shadow-[0_1px_0_0_rgb(226_232_240)]">
               <TableRow>
-                <TableHead>S.No.</TableHead>
-                <TableHead>Compound</TableHead>
-                <TableHead>Formula</TableHead>
-                <TableHead>Molar Mass</TableHead>
+                <TableHead className="w-9 text-center sm:w-11">#</TableHead>
+                <TableHead className="min-w-0">Compound</TableHead>
+                <TableHead className="w-[26%] min-w-0 sm:w-[23%]">Formula</TableHead>
+                <TableHead className="w-[24%] text-right sm:w-[22%]">Molar mass</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {rows.map((compound, index) => (
                 <TableRow key={compound.formula}>
-                  <TableCell className="text-xs text-[#0a0f1a]/70">{index + 1}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-center tabular-nums text-[#0a0f1a]/70">{index + 1}</TableCell>
+                  <TableCell className="min-w-0 break-words leading-snug">
                     <Link
-                      className="font-medium text-[#0a0f1a] underline-offset-2 hover:text-[#0F766E] hover:underline"
+                      className="font-normal text-inherit text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
                       href={getCompoundHref(compound.formula)}
                       prefetch={false}
                     >
                       {compound.name}
                     </Link>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="min-w-0 break-words leading-snug text-[#0F766E]">
                     <FormulaSub formula={compound.formula} />
                   </TableCell>
-                  <TableCell>{compound.molarMass.toFixed(2)} g/mol</TableCell>
+                  <TableCell className="text-right tabular-nums leading-snug">{compound.molarMass.toFixed(2)} g/mol</TableCell>
                 </TableRow>
               ))}
             </TableBody>

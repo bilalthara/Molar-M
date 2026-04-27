@@ -28,10 +28,16 @@ export function TableRow({ className, ...props }: React.HTMLAttributes<HTMLTable
 
 export function TableHead({ className, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <th className={cn("h-10 px-3 text-left align-middle text-xs font-semibold uppercase tracking-wide text-[#0F172A]", className)} {...props} />
+    <th
+      className={cn(
+        "h-auto min-h-0 px-3 py-2 text-left align-middle text-inherit font-semibold uppercase tracking-wide text-[#0F172A]",
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
 export function TableCell({ className, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className={cn("p-3 align-middle text-base text-[#0F172A]", className)} {...props} />;
+  return <td className={cn("px-2 py-1.5 align-middle text-inherit text-[#0F172A]", className)} {...props} />;
 }

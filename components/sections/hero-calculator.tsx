@@ -8,13 +8,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FormulaSub } from "@/components/ui/formula-sub";
 import { Input } from "@/components/ui/input";
+import { WhatIsMolarMassCard } from "@/components/sections/what-is-molar-mass-card";
 import { getCompoundName } from "@/lib/chemistry-format";
 import { getCompoundSuggestions } from "@/lib/calculator-suggestions";
 import { getCompoundHref, quickFormulas, resolveFormulaFromKeyword } from "@/lib/compound-data";
 import { getElementDisplay } from "@/lib/element-names";
 import { calculateMolarMass } from "@/lib/molar-mass";
 
-const DEFAULT_CALCULATOR_INPUT = "O2 or Oxygen";
+const CALCULATOR_PLACEHOLDER_FULL = "Enter formula or compound name (O2 or Oxygen)";
+const CALCULATOR_PLACEHOLDER_NARROW = "Formula or name (O2, Oxygen)";
 
 type HeroCalculatorProps = {
   /** `calculator` = dedicated /calculator page (H1 and copy focus on the tool only). */
@@ -24,10 +26,20 @@ type HeroCalculatorProps = {
 const SUGGESTIONS_LIST_ID = "calculator-compound-suggestions";
 
 export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
-  const [formula, setFormula] = useState(DEFAULT_CALCULATOR_INPUT);
+  const [formula, setFormula] = useState("");
   const [copied, setCopied] = useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const [narrowViewport, setNarrowViewport] = useState(false);
   const inputWrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 420px)");
+    const sync = () => setNarrowViewport(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const suggestions = useMemo(() => getCompoundSuggestions(formula, 60), [formula]);
 
@@ -93,15 +105,16 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
             </p>
           </>
         ) : (
-          <>
-            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#0a0f1a] sm:text-[3.15rem] sm:leading-[1.05]">
-              Molar Mass Calculator, Formula &amp; Compound List
-            </h1>
-            <p className="mt-3 max-w-2xl text-lg leading-relaxed text-[#0a0f1a]">
-              Calculate molar mass quickly, review the element-by-element breakdown, and open compound pages for worked examples.
-            </p>
-          </>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#0a0f1a] sm:text-[3.15rem] sm:leading-[1.05]">
+            Molar Mass Calculator, Formula &amp; Compound List
+          </h1>
         )}
+
+        {variant === "home" ? (
+          <div className="mt-5">
+            <WhatIsMolarMassCard />
+          </div>
+        ) : null}
 
         <div
           className="relative mt-5 overflow-visible rounded-xl border border-emerald-900/10 bg-[#e8f5ef] p-5 sm:p-6"
@@ -134,7 +147,7 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
                     aria-expanded={suggestionsOpen && suggestions.length > 0}
                     aria-label="Chemical formula or compound name"
                     autoComplete="off"
-                    className="h-12 border-slate-200/90 bg-white text-[15px] text-[#0a0f1a] focus-visible:border-[#1FA37A]"
+                    className="h-12 border-slate-200/90 bg-white px-3 text-[13px] leading-snug text-[#0a0f1a] placeholder:text-[11px] placeholder:leading-snug placeholder:tracking-tight focus-visible:border-[#1FA37A] sm:px-3.5 sm:text-[15px] sm:placeholder:text-sm"
                     onChange={(event) => {
                       setFormula(event.target.value);
                       setSuggestionsOpen(true);
@@ -142,7 +155,7 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
                     onFocus={() => {
                       if (suggestions.length > 0) setSuggestionsOpen(true);
                     }}
-                    placeholder="Formula or compound name (e.g. NaCl, water)"
+                    placeholder={narrowViewport ? CALCULATOR_PLACEHOLDER_NARROW : CALCULATOR_PLACEHOLDER_FULL}
                     role="combobox"
                     value={formula}
                   />
@@ -247,7 +260,7 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
                         <span className="tabular-nums">= {row.contribution.toFixed(2)} g/mol</span>
                       </div>
                     ))}
-                    <div className="overflow-x-auto rounded-md border border-slate-200/80 bg-white px-3 py-2 text-xs text-[#0a0f1a] sm:text-sm">
+                    <div className="rounded-md border border-slate-200/80 bg-white px-3 py-2 text-xs text-[#0a0f1a] sm:text-sm">
                       <p className="min-w-0 whitespace-normal break-words tabular-nums">Molar Mass = ({calculationTerms.join(" + ")})</p>
                       <p className="mt-1 min-w-0 whitespace-normal break-words tabular-nums">= {contributionTerms.join(" + ")}</p>
                       <p className="mt-1 font-semibold text-[#0F766E] tabular-nums">= {result.molarMass.toFixed(2)} g/mol</p>
