@@ -2,20 +2,53 @@
 
 import Link from "next/link";
 import { ArrowRight, Check, Copy, FlaskConical } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FormulaSub } from "@/components/ui/formula-sub";
 import { Input } from "@/components/ui/input";
 import { getCompoundName } from "@/lib/chemistry-format";
+import { getCompoundSuggestions } from "@/lib/calculator-suggestions";
 import { getCompoundHref, quickFormulas, resolveFormulaFromKeyword } from "@/lib/compound-data";
 import { getElementDisplay } from "@/lib/element-names";
 import { calculateMolarMass } from "@/lib/molar-mass";
 
-export function HeroCalculator() {
-  const [formula, setFormula] = useState("O2");
+const DEFAULT_CALCULATOR_INPUT = "O2 or Oxygen";
+
+type HeroCalculatorProps = {
+  /** `calculator` = dedicated /calculator page (H1 and copy focus on the tool only). */
+  variant?: "home" | "calculator";
+};
+
+const SUGGESTIONS_LIST_ID = "calculator-compound-suggestions";
+
+export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
+  const [formula, setFormula] = useState(DEFAULT_CALCULATOR_INPUT);
   const [copied, setCopied] = useState(false);
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const inputWrapRef = useRef<HTMLDivElement>(null);
+
+  const suggestions = useMemo(() => getCompoundSuggestions(formula, 60), [formula]);
+
+  useEffect(() => {
+    if (suggestions.length === 0) {
+      setSuggestionsOpen(false);
+    }
+  }, [suggestions.length]);
+
+  useEffect(() => {
+    if (!suggestionsOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      const el = inputWrapRef.current;
+      if (el && !el.contains(event.target as Node)) {
+        setSuggestionsOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown, true);
+    return () => document.removeEventListener("pointerdown", onPointerDown, true);
+  }, [suggestionsOpen]);
+
   const normalizedInputFormula = useMemo(() => {
     const keywordFormula = resolveFormulaFromKeyword(formula);
     return keywordFormula ?? formula;
@@ -44,15 +77,29 @@ export function HeroCalculator() {
     <section className="mx-auto w-full max-w-6xl border-b border-slate-200/90 px-4 pb-8 pt-[7.5rem] sm:px-6 md:pt-24">
       <div className="space-y-4">
         <Badge>Accurate molar mass data for homework, exams &amp; labs</Badge>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#0a0f1a] sm:text-[3.15rem] sm:leading-[1.05]">
-          Molar Mass Calculator, Formula &amp; Compound List
-        </h1>
-        <p className="mt-3 max-w-2xl text-lg leading-relaxed text-[#0a0f1a]">
-          Calculate molar mass quickly, review the element-by-element breakdown, and open compound pages for worked examples.
-        </p>
+        {variant === "calculator" ? (
+          <>
+            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#0a0f1a] sm:text-[3.15rem] sm:leading-[1.05]">
+              Molar Mass Calculator
+            </h1>
+            <p className="mt-3 max-w-2xl text-lg leading-relaxed text-[#0a0f1a]">
+              Enter a chemical formula or a compound name and get the molar mass in g/mol, with a clear element-by-element
+              breakdown.
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#0a0f1a] sm:text-[3.15rem] sm:leading-[1.05]">
+              Molar Mass Calculator, Formula &amp; Compound List
+            </h1>
+            <p className="mt-3 max-w-2xl text-lg leading-relaxed text-[#0a0f1a]">
+              Calculate molar mass quickly, review the element-by-element breakdown, and open compound pages for worked examples.
+            </p>
+          </>
+        )}
 
         <div
-          className="relative mt-5 overflow-hidden rounded-xl border border-emerald-900/10 bg-[#e8f5ef] p-5 sm:p-6"
+          className="relative mt-5 overflow-visible rounded-xl border border-emerald-900/10 bg-[#e8f5ef] p-5 sm:p-6"
           id="calculator"
         >
           <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-8">
@@ -64,19 +111,61 @@ export function HeroCalculator() {
                     Enter a formula (<FormulaSub className="font-medium" formula="H2O" />) or a compound name (for example
                     water or oxygen).
                   </li>
+                  <li>
+                    While typing a name, matching compounds appear in a list under the field (scroll if the list is long),
+                    then pick one or keep typing.
+                  </li>
                   <li>Press Calculate or choose a quick example.</li>
                   <li>Read the final answer in g/mol and element-by-element breakdown.</li>
                 </ul>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-                <Input
-                  aria-label="Chemical formula input"
-                  className="h-12 border-slate-200/90 bg-white text-[15px] text-[#0a0f1a] focus-visible:border-[#1FA37A]"
-                  onChange={(event) => setFormula(event.target.value)}
-                  placeholder="O2 or Oxygen — formula or compound name"
-                  value={formula}
-                />
+                <div className="relative min-w-0 flex-1" ref={inputWrapRef}>
+                  <Input
+                    aria-autocomplete="list"
+                    aria-controls={suggestions.length ? SUGGESTIONS_LIST_ID : undefined}
+                    aria-expanded={suggestionsOpen && suggestions.length > 0}
+                    aria-label="Chemical formula or compound name"
+                    autoComplete="off"
+                    className="h-12 border-slate-200/90 bg-white text-[15px] text-[#0a0f1a] focus-visible:border-[#1FA37A]"
+                    onChange={(event) => {
+                      setFormula(event.target.value);
+                      setSuggestionsOpen(true);
+                    }}
+                    onFocus={() => {
+                      if (suggestions.length > 0) setSuggestionsOpen(true);
+                    }}
+                    placeholder="Formula or compound name (e.g. NaCl, water)"
+                    role="combobox"
+                    value={formula}
+                  />
+                  {suggestionsOpen && suggestions.length > 0 ? (
+                    <ul
+                      className="absolute left-0 right-0 top-full z-[60] mt-1 max-h-60 overflow-y-auto overscroll-contain rounded-md border border-slate-200 bg-white py-1 shadow-lg"
+                      id={SUGGESTIONS_LIST_ID}
+                      role="listbox"
+                    >
+                      {suggestions.map((row) => (
+                        <li key={row.formula} role="presentation">
+                          <button
+                            className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm text-[#0a0f1a] hover:bg-emerald-50"
+                            onMouseDown={(event) => {
+                              event.preventDefault();
+                              setFormula(row.name);
+                              setSuggestionsOpen(false);
+                            }}
+                            role="option"
+                            type="button"
+                          >
+                            <span className="min-w-0 font-medium">{row.name}</span>
+                            <FormulaSub className="shrink-0 text-[#0F766E]" formula={row.formula} />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
                 <Button className="h-12 shrink-0 px-7" size="lg" type="button">
                   Calculate
                 </Button>
