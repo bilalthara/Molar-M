@@ -15,8 +15,7 @@ import { getCompoundHref, quickFormulas, resolveFormulaFromKeyword } from "@/lib
 import { getElementDisplay } from "@/lib/element-names";
 import { calculateMolarMass } from "@/lib/molar-mass";
 
-const CALCULATOR_PLACEHOLDER_FULL = "Enter formula or compound name (O2 or Oxygen)";
-const CALCULATOR_PLACEHOLDER_NARROW = "Formula or name (O2, Oxygen)";
+const CALCULATOR_PLACEHOLDER = "Enter formula or compound name (O2 or Oxygen)";
 
 type HeroCalculatorProps = {
   /** `calculator` = dedicated /calculator page (H1 and copy focus on the tool only). */
@@ -29,17 +28,7 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
   const [formula, setFormula] = useState("");
   const [copied, setCopied] = useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
-  const [narrowViewport, setNarrowViewport] = useState(false);
   const inputWrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(max-width: 420px)");
-    const sync = () => setNarrowViewport(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
 
   const suggestions = useMemo(() => getCompoundSuggestions(formula, 60), [formula]);
 
@@ -155,7 +144,7 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
                     onFocus={() => {
                       if (suggestions.length > 0) setSuggestionsOpen(true);
                     }}
-                    placeholder={narrowViewport ? CALCULATOR_PLACEHOLDER_NARROW : CALCULATOR_PLACEHOLDER_FULL}
+                    placeholder={CALCULATOR_PLACEHOLDER}
                     role="combobox"
                     value={formula}
                   />
