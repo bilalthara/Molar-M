@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="bg-white text-[#0a0f1a]">
+    <main className="min-w-0 max-w-full bg-white text-[#0a0f1a]">
       <StructuredData isHome />
       <HeroCalculator />
 
@@ -135,15 +135,7 @@ export default function Home() {
             </CardHeader>
             <CardContent className="space-y-3 text-base text-[#0a0f1a]">
               <p>
-                New to molar mass? Read the{" "}
-                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getInternalLink("home")}>
-                  short definition
-                </Link>
-                , work through the{" "}
-                <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getInternalLink("home")}>
-                  step-by-step guide
-                </Link>
-                , then try{" "}
+                New to molar mass? Read the short definition, work through the step-by-step guide, then try{" "}
                 <Link className="text-[#0F766E] underline-offset-2 hover:underline" href={getCompoundHref("H2O")}>
                   Water (<FormulaSub formula="H2O" />)
                 </Link>

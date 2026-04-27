@@ -10,15 +10,7 @@ export function HomeMolarMassGuide() {
   return (
     <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6" id="molar-mass-guide">
       <p className="mb-4 text-sm text-[#0a0f1a]/80">
-        For instant numbers, use the{" "}
-        <Link className="font-medium text-[#0F766E] underline-offset-2 hover:underline" href={getInternalLink("calculator")}>
-          calculator above
-        </Link>{" "}
-        or the{" "}
-        <Link className="font-medium text-[#0F766E] underline-offset-2 hover:underline" href={getInternalLink("calculator")} prefetch={false}>
-          full calculator page
-        </Link>
-        {" "}or practice with the{" "}
+        For instant numbers, use the calculator above or practice with the{" "}
         <Link className="font-medium text-[#0F766E] underline-offset-2 hover:underline" href="/molar-mass-practice-worksheet" prefetch={false}>
           Molar Mass Practice Worksheet
         </Link>

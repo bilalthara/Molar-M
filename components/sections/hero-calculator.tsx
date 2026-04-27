@@ -41,7 +41,7 @@ export function HeroCalculator() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-6xl border-b border-slate-200/90 px-4 pt-24 pb-8 sm:px-6">
+    <section className="mx-auto w-full max-w-6xl border-b border-slate-200/90 px-4 pb-8 pt-[7.5rem] sm:px-6 md:pt-24">
       <div className="space-y-4">
         <Badge>Accurate molar mass data for homework, exams &amp; labs</Badge>
         <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#0a0f1a] sm:text-[3.15rem] sm:leading-[1.05]">
@@ -55,8 +55,8 @@ export function HeroCalculator() {
           className="relative mt-5 overflow-hidden rounded-xl border border-emerald-900/10 bg-[#e8f5ef] p-5 sm:p-6"
           id="calculator"
         >
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-8">
-            <div className="space-y-5">
+          <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-8">
+            <div className="min-w-0 space-y-5">
               <div className="rounded-lg border border-slate-200/80 bg-white/90 p-4">
                 <p className="text-base font-semibold text-[#0a0f1a]">How to use this calculator</p>
                 <ul className="mt-2 list-disc space-y-1.5 pl-5 text-base leading-relaxed text-[#0a0f1a]">
@@ -74,7 +74,7 @@ export function HeroCalculator() {
                   aria-label="Chemical formula input"
                   className="h-12 border-slate-200/90 bg-white text-[15px] text-[#0a0f1a] focus-visible:border-[#1FA37A]"
                   onChange={(event) => setFormula(event.target.value)}
-                  placeholder="e.g. H2O, Ca(OH)2, water, oxygen"
+                  placeholder="O2 or Oxygen — formula or compound name"
                   value={formula}
                 />
                 <Button className="h-12 shrink-0 px-7" size="lg" type="button">
@@ -98,7 +98,7 @@ export function HeroCalculator() {
               </div>
             </div>
 
-            <div className="space-y-4 border-t border-slate-200/80 pt-5 lg:border-t-0 lg:border-l lg:border-slate-200/60 lg:pl-8 lg:pt-0">
+            <div className="min-w-0 space-y-4 border-t border-slate-200/80 pt-5 lg:border-t-0 lg:border-l lg:border-slate-200/60 lg:pl-8 lg:pt-0">
               {result ? (
                 <>
                   <div className="flex flex-wrap items-center justify-between gap-2 text-lg font-semibold text-[#0a0f1a]">
@@ -118,7 +118,7 @@ export function HeroCalculator() {
                   </div>
                   <div className="space-y-3">
                     <div className="rounded-lg border border-slate-200/90 bg-white px-4 py-4 sm:px-5 sm:py-5">
-                      <p className="whitespace-nowrap text-3xl font-bold tracking-tight text-[#0F766E] sm:text-4xl md:text-5xl">
+                      <p className="break-words text-2xl font-bold tracking-tight text-[#0F766E] min-[380px]:text-3xl sm:whitespace-nowrap sm:text-4xl md:text-5xl">
                         {result.molarMass.toFixed(2)} g/mol
                       </p>
                     </div>
@@ -140,10 +140,10 @@ export function HeroCalculator() {
                         <span className="tabular-nums">= {row.contribution.toFixed(2)} g/mol</span>
                       </div>
                     ))}
-                    <div className="rounded-md border border-slate-200/80 bg-white px-3 py-2 text-sm text-[#0a0f1a]">
-                      <p className="tabular-nums">Molar Mass = ({calculationTerms.join(" + ")})</p>
-                      <p className="tabular-nums">= {contributionTerms.join(" + ")}</p>
-                      <p className="font-semibold text-[#0F766E] tabular-nums">= {result.molarMass.toFixed(2)} g/mol</p>
+                    <div className="overflow-x-auto rounded-md border border-slate-200/80 bg-white px-3 py-2 text-xs text-[#0a0f1a] sm:text-sm">
+                      <p className="min-w-0 whitespace-normal break-words tabular-nums">Molar Mass = ({calculationTerms.join(" + ")})</p>
+                      <p className="mt-1 min-w-0 whitespace-normal break-words tabular-nums">= {contributionTerms.join(" + ")}</p>
+                      <p className="mt-1 font-semibold text-[#0F766E] tabular-nums">= {result.molarMass.toFixed(2)} g/mol</p>
                     </div>
                   </div>
                   <Link

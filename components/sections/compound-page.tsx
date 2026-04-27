@@ -257,8 +257,8 @@ export function CompoundPage({ compound }: CompoundPageProps) {
     ) : null;
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 pt-24 pb-8 text-[#0a0f1a] sm:px-6">
-      <div className="mb-6 flex items-center gap-2 text-sm text-[#0a0f1a]/80">
+    <section className="mx-auto w-full min-w-0 max-w-6xl px-4 pb-8 pt-[7.5rem] text-[#0a0f1a] sm:px-6 md:pt-24">
+      <div className="mb-6 flex min-w-0 flex-wrap items-center gap-2 text-sm text-[#0a0f1a]/80">
         <span className="font-medium text-[#0a0f1a]/70">Molar Mass Lab</span>
         <span>/</span>
         <span>
@@ -266,17 +266,17 @@ export function CompoundPage({ compound }: CompoundPageProps) {
         </span>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <main className="space-y-6">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <main className="min-w-0 max-w-full space-y-6">
           <div className="space-y-3 border-b border-slate-200/90 pb-6">
             <Badge>{categoryLabel}</Badge>
-            <h1 className="text-3xl font-bold tracking-tight text-[#0a0f1a] sm:text-4xl">
+            <h1 className="break-words text-2xl font-bold tracking-tight text-[#0a0f1a] sm:text-3xl md:text-4xl">
               Molar Mass of {compound.name} (<FormulaSub formula={compound.formula} />)
             </h1>
-            <p className="max-w-3xl text-base leading-relaxed text-[#0a0f1a]">
+            <p className="max-w-full text-base leading-relaxed text-[#0a0f1a] sm:max-w-3xl">
               {introParagraph}
             </p>
-            <p className="max-w-3xl text-sm leading-relaxed text-[#0a0f1a]/85">
+            <p className="max-w-full text-sm leading-relaxed text-[#0a0f1a]/85 sm:max-w-3xl">
               For fast checks, use the{" "}
               <Link
                 className="text-[#0F766E] underline-offset-2 hover:underline"
@@ -307,23 +307,25 @@ export function CompoundPage({ compound }: CompoundPageProps) {
 
           <Reveal>
             <Card className="border border-slate-200/90 bg-white" id="answer-box">
-              <CardHeader className="flex flex-row items-center justify-between gap-3">
-                <CardTitle className="flex items-center gap-2">
-                  <span className="flex items-center gap-2">
+              <CardHeader className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <CardTitle className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+                  <span className="flex min-w-0 flex-wrap items-center gap-2">
                     <Atom className="h-5 w-5 text-[#0F766E]" aria-hidden />
                     {primaryKeyword} is:
                   </span>
                 </CardTitle>
-                <CompoundCopyAnswerButton
-                  formula={compound.formula}
-                  molarMass={compound.molarMass}
-                  name={compound.name}
-                />
+                <div className="shrink-0 self-start sm:self-center">
+                  <CompoundCopyAnswerButton
+                    formula={compound.formula}
+                    molarMass={compound.molarMass}
+                    name={compound.name}
+                  />
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="overflow-x-auto rounded-lg border border-slate-200/90 bg-white px-4 py-5 sm:px-5 sm:py-6">
-                    <p className="whitespace-nowrap text-4xl font-bold tracking-tight text-[#0F766E] sm:text-5xl md:text-6xl">
+                    <p className="break-words text-3xl font-bold tracking-tight text-[#0F766E] sm:text-4xl sm:whitespace-nowrap md:text-5xl lg:text-6xl">
                       {compound.molarMass.toFixed(2)} g/mol
                     </p>
                   </div>
@@ -342,8 +344,8 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 <CardTitle>Element Breakdown Table</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="overflow-hidden rounded-lg border border-slate-200">
-                  <Table>
+                <div className="max-w-full overflow-x-auto rounded-lg border border-slate-200">
+                  <Table className="min-w-[36rem]">
                     <TableHeader>
                       <TableRow>
                         <TableHead>Element</TableHead>
@@ -437,14 +439,14 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-slate-200/90 bg-white p-4 text-center sm:p-5">
-                  <p className="text-lg leading-relaxed">
+                <div className="overflow-x-auto rounded-lg border border-slate-200/90 bg-white p-4 text-center sm:p-5">
+                  <p className="min-w-0 whitespace-normal break-words text-base leading-relaxed tabular-nums sm:text-lg">
                     Molar Mass = ({groupedTerm})
                   </p>
-                  <p className="mt-3 text-lg leading-relaxed">
+                  <p className="mt-3 min-w-0 whitespace-normal break-words text-base leading-relaxed tabular-nums sm:text-lg">
                     Molar Mass = {perElementSum}
                   </p>
-                  <p className="mt-3 text-lg font-semibold leading-relaxed text-[#0F766E]">
+                  <p className="mt-3 text-lg font-semibold leading-relaxed text-[#0F766E] tabular-nums">
                     Molar Mass = {compound.molarMass.toFixed(3)} g/mol
                   </p>
                   <p className="mt-4 text-sm leading-relaxed text-[#0a0f1a]/80">
@@ -454,8 +456,8 @@ export function CompoundPage({ compound }: CompoundPageProps) {
 
                 <div className="rounded-lg border border-slate-200/90 bg-white p-4 sm:p-5">
                   <h3 className="text-lg font-semibold">Visual Calculation Chart</h3>
-                  <div className="mt-3 overflow-hidden rounded-lg border border-slate-200">
-                    <Table>
+                  <div className="mt-3 max-w-full overflow-x-auto rounded-lg border border-slate-200">
+                    <Table className="min-w-[40rem]">
                       <TableHeader>
                         <TableRow>
                           <TableHead>Element</TableHead>
@@ -524,8 +526,8 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 <CardTitle>Sample Reactions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="overflow-hidden rounded-lg border border-slate-200">
-                  <Table>
+                <div className="max-w-full overflow-x-auto rounded-lg border border-slate-200">
+                  <Table className="min-w-[20rem]">
                     <TableHeader>
                       <TableRow>
                         <TableHead>Type</TableHead>
@@ -535,8 +537,10 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                     <TableBody>
                       {compound.reactions.map((reaction) => (
                         <TableRow key={`${reaction.type}-${reaction.equation}`}>
-                          <TableCell>{reaction.type}</TableCell>
-                          <TableCell>{formatFormula(reaction.equation)}</TableCell>
+                          <TableCell className="whitespace-nowrap">{reaction.type}</TableCell>
+                          <TableCell className="max-w-[min(100vw,28rem)] break-words sm:max-w-none">
+                            {formatFormula(reaction.equation)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

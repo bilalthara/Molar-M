@@ -59,7 +59,7 @@ export default function RootLayout({
         <ScrollToTop />
         <PrimaryHeader />
         <SecondaryHeader />
-        <div className="flex-1">{children}</div>
+        <div className="min-w-0 flex-1">{children}</div>
         <SiteFooter />
       </body>
     </html>

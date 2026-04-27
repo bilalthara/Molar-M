@@ -50,7 +50,7 @@ export function SecondaryHeader() {
 
   return (
     <div
-      className={`secondary-ticker sticky z-40 w-full border-b border-emerald-950/15 bg-[#1FA37A] ${primaryHidden ? "top-0" : "top-16"}`}
+      className={`secondary-ticker z-[45] w-full border-b border-emerald-950/15 bg-[#1FA37A] max-md:fixed max-md:left-0 max-md:right-0 md:sticky ${primaryHidden ? "top-0 max-md:top-0" : "top-16 max-md:top-16"}`}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 sm:gap-4 sm:px-6">
         {primaryHidden ? (
