@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Check, Copy, FlaskConical } from "lucide-react";
+import { ArrowRight, Check, Copy, FlaskConical, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -37,17 +37,22 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
     }
   }, [suggestions.length]);
 
+  /** Desktop (md+): close suggestions when clicking outside. Mobile: only X or picking a row closes. */
   useEffect(() => {
-    if (!suggestionsOpen) return;
+    if (!suggestionsOpen || suggestions.length === 0) return;
+
     const onPointerDown = (event: PointerEvent) => {
-      const el = inputWrapRef.current;
-      if (el && !el.contains(event.target as Node)) {
+      if (typeof window === "undefined") return;
+      if (!window.matchMedia("(min-width: 768px)").matches) return;
+      const wrap = inputWrapRef.current;
+      if (wrap && !wrap.contains(event.target as Node)) {
         setSuggestionsOpen(false);
       }
     };
+
     document.addEventListener("pointerdown", onPointerDown, true);
     return () => document.removeEventListener("pointerdown", onPointerDown, true);
-  }, [suggestionsOpen]);
+  }, [suggestionsOpen, suggestions.length]);
 
   const normalizedInputFormula = useMemo(() => {
     const keywordFormula = resolveFormulaFromKeyword(formula);
@@ -112,8 +117,9 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
                     water or oxygen).
                   </li>
                   <li>
-                    While typing a name, matching compounds appear in a list under the field (scroll if the list is long),
-                    then pick one or keep typing.
+                    While typing a name, matching compounds appear in a list under the field (scroll if the list is long).
+                    On phones and tablets, close it with the X or by choosing a compound. On desktop, it also closes when you
+                    click elsewhere on the page.
                   </li>
                   <li>Press Calculate or choose a quick example.</li>
                   <li>Read the final answer in g/mol and element-by-element breakdown.</li>
@@ -141,29 +147,41 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
                     value={formula}
                   />
                   {suggestionsOpen && suggestions.length > 0 ? (
-                    <ul
-                      className="absolute left-0 right-0 top-full z-[60] mt-1 max-h-60 overflow-y-auto overscroll-contain rounded-md border border-slate-200 bg-white py-1 shadow-lg"
-                      id={SUGGESTIONS_LIST_ID}
-                      role="listbox"
-                    >
-                      {suggestions.map((row) => (
-                        <li key={row.formula} role="presentation">
-                          <button
-                            className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm text-[#0a0f1a] hover:bg-emerald-50"
-                            onMouseDown={(event) => {
-                              event.preventDefault();
-                              setFormula(row.name);
-                              setSuggestionsOpen(false);
-                            }}
-                            role="option"
-                            type="button"
-                          >
-                            <span className="min-w-0 font-medium">{row.name}</span>
-                            <FormulaSub className="shrink-0 text-[#0F766E]" formula={row.formula} />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="absolute left-0 right-0 top-full z-[60] mt-1 flex flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-lg">
+                      <div className="flex shrink-0 items-center justify-end border-b border-slate-100 bg-slate-50 px-1 py-0.5">
+                        <button
+                          aria-label="Close suggestions"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[#0a0f1a] transition-colors hover:bg-slate-200/80 hover:text-[#0F766E]"
+                          onClick={() => setSuggestionsOpen(false)}
+                          type="button"
+                        >
+                          <X className="h-4 w-4" aria-hidden />
+                        </button>
+                      </div>
+                      <ul
+                        className="max-h-60 overflow-y-auto overscroll-contain py-1"
+                        id={SUGGESTIONS_LIST_ID}
+                        role="listbox"
+                      >
+                        {suggestions.map((row) => (
+                          <li key={row.formula} role="presentation">
+                            <button
+                              className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm text-[#0a0f1a] hover:bg-emerald-50"
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                setFormula(row.name);
+                                setSuggestionsOpen(false);
+                              }}
+                              role="option"
+                              type="button"
+                            >
+                              <span className="min-w-0 font-medium">{row.name}</span>
+                              <FormulaSub className="shrink-0 text-[#0F766E]" formula={row.formula} />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ) : null}
                 </div>
                 <Button className="h-12 shrink-0 px-7" size="lg" type="button">
