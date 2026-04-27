@@ -23,6 +23,14 @@ export function HeroCalculator() {
   const result = useMemo(() => calculateMolarMass(normalizedInputFormula), [normalizedInputFormula]);
   const normalizedFormula = result?.formula ?? formula.trim();
   const compoundName = getCompoundName(normalizedFormula);
+  const calculationTerms = useMemo(
+    () => result?.breakdown.map((row) => `${row.count} x ${row.atomicMass.toFixed(2)}`) ?? [],
+    [result],
+  );
+  const contributionTerms = useMemo(
+    () => result?.breakdown.map((row) => row.contribution.toFixed(2)) ?? [],
+    [result],
+  );
 
   const onCopyValue = async () => {
     if (!result) return;
@@ -40,8 +48,7 @@ export function HeroCalculator() {
           Molar Mass Calculator, Formula &amp; Compound List
         </h1>
         <p className="mt-3 max-w-2xl text-lg leading-relaxed text-[#0a0f1a]">
-          Accurate molar mass calculations, element-by-element breakdowns, and structured compound pages built for coursework,
-          lab prep, and quick verification.
+          Calculate molar mass quickly, review the element-by-element breakdown, and open compound pages for worked examples.
         </p>
 
         <div
@@ -94,17 +101,22 @@ export function HeroCalculator() {
             <div className="space-y-4 border-t border-slate-200/80 pt-5 lg:border-t-0 lg:border-l lg:border-slate-200/60 lg:pl-8 lg:pt-0">
               {result ? (
                 <>
-                  <div className="flex flex-wrap items-center gap-2 text-lg font-semibold text-[#0a0f1a]">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-lg font-semibold text-[#0a0f1a]">
                     <FlaskConical className="h-5 w-5 shrink-0 text-[#0F766E]" aria-hidden />
                     <span>
                       Molar mass of <FormulaSub formula={normalizedFormula} /> is:
                     </span>
-                  </div>
-                  <div className="space-y-3">
-                    <Button className="w-fit border-slate-200/90" onClick={onCopyValue} type="button" variant="outline">
-                      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    <Button
+                      className="ml-auto h-8 w-fit border-slate-200/90 px-2.5 text-xs"
+                      onClick={onCopyValue}
+                      type="button"
+                      variant="outline"
+                    >
+                      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                       {copied ? "Copied" : "Copy Answer"}
                     </Button>
+                  </div>
+                  <div className="space-y-3">
                     <div className="rounded-lg border border-slate-200/90 bg-white px-4 py-4 sm:px-5 sm:py-5">
                       <p className="whitespace-nowrap text-3xl font-bold tracking-tight text-[#0F766E] sm:text-4xl md:text-5xl">
                         {result.molarMass.toFixed(2)} g/mol
@@ -123,11 +135,16 @@ export function HeroCalculator() {
                         className="flex items-center justify-between rounded-md border border-slate-200/80 bg-white px-3 py-2 text-sm text-[#0a0f1a]"
                       >
                         <span>
-                          {getElementDisplay(row.element)} × {row.count}
+                          {getElementDisplay(row.element)}: {row.count} x {row.atomicMass.toFixed(2)}
                         </span>
-                        <span className="tabular-nums">{row.contribution.toFixed(2)} g/mol</span>
+                        <span className="tabular-nums">= {row.contribution.toFixed(2)} g/mol</span>
                       </div>
                     ))}
+                    <div className="rounded-md border border-slate-200/80 bg-white px-3 py-2 text-sm text-[#0a0f1a]">
+                      <p className="tabular-nums">Molar Mass = ({calculationTerms.join(" + ")})</p>
+                      <p className="tabular-nums">= {contributionTerms.join(" + ")}</p>
+                      <p className="font-semibold text-[#0F766E] tabular-nums">= {result.molarMass.toFixed(2)} g/mol</p>
+                    </div>
                   </div>
                   <Link
                     className="inline-flex items-center gap-1 text-sm font-semibold text-[#0F766E] underline-offset-2 hover:underline"

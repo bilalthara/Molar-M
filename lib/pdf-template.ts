@@ -103,3 +103,33 @@ export function drawPremiumPdfChrome(
   doc.text(FOOTER_URL, pageWidth / 2, pageHeight - 4.5, { align: "center" });
   doc.setTextColor(20, 24, 30);
 }
+
+export function drawFormulaText(
+  doc: jsPDF,
+  formula: string,
+  x: number,
+  y: number,
+  options?: {
+    baseFontSize?: number;
+    subscriptScale?: number;
+    subscriptYOffset?: number;
+  },
+) {
+  const baseFontSize = options?.baseFontSize ?? 12;
+  const subscriptScale = options?.subscriptScale ?? 0.75;
+  const subscriptYOffset = options?.subscriptYOffset ?? 1.8;
+  const prevFontSize = doc.getFontSize();
+  let cursorX = x;
+
+  for (const ch of formula) {
+    const isDigit = /[0-9]/.test(ch);
+    const fontSize = isDigit ? baseFontSize * subscriptScale : baseFontSize;
+    const yPos = isDigit ? y + subscriptYOffset : y;
+    doc.setFontSize(fontSize);
+    doc.text(ch, cursorX, yPos);
+    cursorX += doc.getTextWidth(ch);
+  }
+
+  doc.setFontSize(prevFontSize);
+  return cursorX;
+}

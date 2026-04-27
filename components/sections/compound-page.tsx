@@ -38,13 +38,13 @@ function buildCompoundSpecificFacts(compound: CompoundEntry) {
   const largestCount = [...compound.breakdown].sort((a, b) => b.count - a.count)[0];
   const firstReaction = compound.reactions[0];
   const facts: string[] = [
-    `${compound.name} contains ${compound.breakdown.length} element type(s): ${elementList}.`,
-    `${heaviest?.element ?? "One element"} contributes the largest part of total molar mass for this compound.`,
-    `In ${formatFormula(compound.formula)}, ${largestCount?.element ?? "an element"} has the highest atom count.`,
-    `Its molar mass is ${compound.molarMass.toFixed(2)} g/mol, making it useful in mole-to-gram conversion questions.`,
+    `${compound.name} contains ${compound.breakdown.length} element types: ${elementList}.`,
+    `${heaviest?.element ?? "One element"} contributes the largest share of this compound's total molar mass.`,
+    `In ${formatFormula(compound.formula)}, ${largestCount?.element ?? "one element"} appears with the highest atom count.`,
+    `Its molar mass is ${compound.molarMass.toFixed(2)} g/mol, which is used directly in gram-to-mole conversions.`,
     firstReaction
-      ? `A common ${compound.name} reaction pattern is ${firstReaction.type.toLowerCase()} (${formatFormula(firstReaction.equation)}).`
-      : `${compound.name} appears often in stoichiometry examples because its formula structure is easy to break down.`,
+      ? `A common reaction for ${compound.name} is ${firstReaction.type.toLowerCase()} (${formatFormula(firstReaction.equation)}).`
+      : `${compound.name} appears regularly in stoichiometry questions because its formula is straightforward to analyze.`,
   ];
 
   if (compound.category === "acid") {
@@ -106,6 +106,43 @@ function buildCommonMistakes(compound: CompoundEntry) {
     `Mixing up ${dominant ?? "dominant"} element contribution with total molar mass.`,
     `Reporting a value without units; final answer should be in g/mol for ${compound.name}.`,
   ];
+}
+
+function getCompoundIntro(compound: CompoundEntry) {
+  const primaryKeyword = `Molar Mass of ${compound.name}`;
+  const secondaryKeyword = `Molar Mass of ${formatFormula(compound.formula)}`;
+  const atomKinds = compound.breakdown.length;
+  const dominantElement = [...compound.breakdown].sort((a, b) => b.contribution - a.contribution)[0]?.element ?? "the dominant element";
+  const variantsByCategory: Record<CompoundEntry["category"], string[]> = {
+    acid: [
+      `${primaryKeyword} is useful when preparing acid solutions and checking neutralization calculations in class and lab.`,
+      `${primaryKeyword} gives a reliable base for titration work, where even small mass errors can shift final concentration.`,
+      `${primaryKeyword} is a practical checkpoint before starting acid-base stoichiometry, especially in measured solution problems.`,
+    ],
+    base: [
+      `${primaryKeyword} is often used in pH and neutralization exercises where accurate mole conversion is essential.`,
+      `${primaryKeyword} helps students set up base-solution quantities correctly before reaction and dilution steps.`,
+      `${primaryKeyword} is a frequent exam value for base chemistry, particularly in mole-to-gram and back-conversion questions.`,
+    ],
+    salt: [
+      `${primaryKeyword} is commonly used in ionic-equation practice and concentration calculations for salt solutions.`,
+      `${primaryKeyword} makes it easier to move between measured grams and moles in classroom precipitation problems.`,
+      `${primaryKeyword} is a key number in salt-related stoichiometry, especially when balancing reactants and products.`,
+    ],
+    organic: [
+      `${primaryKeyword} supports organic chemistry work where composition and mass relationships are compared across carbon compounds.`,
+      `${primaryKeyword} is helpful for yield calculations and formula checks in carbon-chain reaction questions.`,
+      `${primaryKeyword} is often referenced when connecting molecular structure to quantitative conversion steps.`,
+    ],
+    gas: [
+      `${primaryKeyword} is used in gas-law and stoichiometry questions that require clean mole-to-mass conversion.`,
+      `${primaryKeyword} helps verify calculated gas quantities before volume or pressure-based comparisons.`,
+      `${primaryKeyword} is a core value for atmospheric and reaction-based gas calculations in chemistry practice.`,
+    ],
+  };
+  const variantIndex = (compound.formula.charCodeAt(0) + compound.formula.length) % variantsByCategory[compound.category].length;
+  const leadLine = variantsByCategory[compound.category][variantIndex];
+  return `${leadLine} ${secondaryKeyword} is ${compound.molarMass.toFixed(2)} g/mol, based on ${atomKinds} element types, with ${dominantElement} contributing the largest share.`;
 }
 
 const pageSections = [
@@ -190,6 +227,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
   const categoryLabel = compound.category.charAt(0).toUpperCase() + compound.category.slice(1);
   const primaryKeyword = `Molar Mass of ${compound.name}`;
   const secondaryKeyword = `Molar Mass of ${formatFormula(compound.formula)}`;
+  const introParagraph = getCompoundIntro(compound);
   const relatedLabels = compound.relatedCompounds.map((formula) => getCompoundDisplayLabel(formula));
   const sameElementLabels = compound.sameElementCompounds
     .filter((f) => isKnownCompoundFormula(f))
@@ -236,8 +274,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
               Molar Mass of {compound.name} (<FormulaSub formula={compound.formula} />)
             </h1>
             <p className="max-w-3xl text-base leading-relaxed text-[#0a0f1a]">
-              {primaryKeyword} helps students convert grams to moles quickly. {secondaryKeyword} is{" "}
-              {compound.molarMass.toFixed(2)} g/mol, and this page explains each step in simple language.
+              {introParagraph}
             </p>
             <p className="max-w-3xl text-sm leading-relaxed text-[#0a0f1a]/85">
               For fast checks, use the{" "}
@@ -270,22 +307,20 @@ export function CompoundPage({ compound }: CompoundPageProps) {
 
           <Reveal>
             <Card className="border border-slate-200/90 bg-white" id="answer-box">
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between gap-3">
                 <CardTitle className="flex items-center gap-2">
                   <span className="flex items-center gap-2">
                     <Atom className="h-5 w-5 text-[#0F766E]" aria-hidden />
                     {primaryKeyword} is:
                   </span>
                 </CardTitle>
+                <CompoundCopyAnswerButton
+                  formula={compound.formula}
+                  molarMass={compound.molarMass}
+                  name={compound.name}
+                />
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex justify-end">
-                  <CompoundCopyAnswerButton
-                    formula={compound.formula}
-                    molarMass={compound.molarMass}
-                    name={compound.name}
-                  />
-                </div>
                 <div className="space-y-3">
                   <div className="overflow-x-auto rounded-lg border border-slate-200/90 bg-white px-4 py-5 sm:px-5 sm:py-6">
                     <p className="whitespace-nowrap text-4xl font-bold tracking-tight text-[#0F766E] sm:text-5xl md:text-6xl">
@@ -314,6 +349,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                         <TableHead>Element</TableHead>
                         <TableHead>Count</TableHead>
                         <TableHead>Atomic Mass</TableHead>
+                        <TableHead>Calculation</TableHead>
                         <TableHead>Contribution</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -323,6 +359,9 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                           <TableCell>{getElementDisplay(row.element)}</TableCell>
                           <TableCell>{row.count}</TableCell>
                           <TableCell>{row.atomicMass.toFixed(2)}</TableCell>
+                          <TableCell className="tabular-nums">
+                            {row.count} x {row.atomicMass.toFixed(2)}
+                          </TableCell>
                           <TableCell>{row.contribution.toFixed(2)} g/mol</TableCell>
                         </TableRow>
                       ))}
@@ -330,6 +369,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                         <TableCell className="font-semibold">Final molar mass</TableCell>
                         <TableCell>-</TableCell>
                         <TableCell>-</TableCell>
+                        <TableCell className="font-semibold tabular-nums">{perElementSum}</TableCell>
                         <TableCell className="font-semibold text-[#0F766E]">{compound.molarMass.toFixed(2)} g/mol</TableCell>
                       </TableRow>
                     </TableBody>
@@ -422,6 +462,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                           <TableHead>Count</TableHead>
                           <TableHead>Mass</TableHead>
                           <TableHead>Count x Mass</TableHead>
+                          <TableHead>Contribution</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -430,14 +471,18 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                             <TableCell>{getElementDisplay(row.element)}</TableCell>
                             <TableCell>{row.count}</TableCell>
                             <TableCell>{row.atomicMass.toFixed(3)}</TableCell>
-                            <TableCell>{row.contribution.toFixed(3)}</TableCell>
+                            <TableCell className="tabular-nums">
+                              {row.count} x {row.atomicMass.toFixed(3)}
+                            </TableCell>
+                            <TableCell className="tabular-nums">= {row.contribution.toFixed(3)}</TableCell>
                           </TableRow>
                         ))}
                         <TableRow>
                           <TableCell className="font-semibold">Final molar mass</TableCell>
                           <TableCell>-</TableCell>
                           <TableCell>-</TableCell>
-                          <TableCell className="font-semibold text-[#0F766E]">{compound.molarMass.toFixed(3)}</TableCell>
+                          <TableCell className="font-semibold tabular-nums">{perElementSum}</TableCell>
+                          <TableCell className="font-semibold text-[#0F766E] tabular-nums">= {compound.molarMass.toFixed(3)}</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -446,8 +491,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 {homeInterlinkP(
                   "steps",
                   <>
-                    When you move on to another formula, {homeLinkWord} walks through the same kind of breakdown so you can
-                    keep the rhythm.
+                    When you move to another formula, {homeLinkWord} gives you the same step-by-step method for quick revision.
                   </>,
                 )}
               </CardContent>
@@ -468,7 +512,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 </ul>
                 {homeInterlinkP(
                   "remember",
-                  <>Keep this checklist beside {homeLinkWord} so you can jump between memory cues and fresh totals.</>,
+                  <>Use this checklist with {homeLinkWord} whenever you want a quick confidence check.</>,
                 )}
               </CardContent>
             </Card>
@@ -500,7 +544,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 </div>
                 {homeInterlinkP(
                   "reactions",
-                  <>Pair these reaction snapshots with {homeLinkWord} when you need numbers for the species on each side.</>,
+                  <>Use these reactions with {homeLinkWord} when you need the molar mass for each species.</>,
                 )}
               </CardContent>
             </Card>
@@ -523,7 +567,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 ))}
                 {homeInterlinkP(
                   "facts",
-                  <>If you want more bite-sized context like this, {homeLinkWord} surfaces other compounds in the same style.</>,
+                  <>For more examples in the same format, browse the related formulas on {homeLinkWord}.</>,
                 )}
               </CardContent>
             </Card>
@@ -620,7 +664,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 </p>
                 {homeInterlinkP(
                   "quick-revision",
-                  <>Between tests, {homeLinkWord} is the fastest way to rehearse new formulas without rebuilding every table.</>,
+                  <>Before a test, {homeLinkWord} helps you review more formulas without rebuilding each table manually.</>,
                 )}
               </CardContent>
             </Card>
@@ -645,7 +689,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 </div>
                 {homeInterlinkP(
                   "formula",
-                  <>Keep {homeLinkWord} open while you rewrite formulas so totals stay consistent with what you see here.</>,
+                  <>Keep {homeLinkWord} open while practicing so your totals match the same method shown here.</>,
                 )}
               </CardContent>
             </Card>

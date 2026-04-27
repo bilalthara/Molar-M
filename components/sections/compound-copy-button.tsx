@@ -24,8 +24,8 @@ export function CompoundCopyAnswerButton({ name, formula, molarMass }: CompoundC
   };
 
   return (
-    <Button onClick={onCopy} size="default" type="button" variant="outline">
-      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+    <Button className="h-8 border-slate-200/90 px-2.5 text-xs" onClick={onCopy} type="button" variant="outline">
+      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
       {copied ? "Copied" : "Copy Answer"}
     </Button>
   );

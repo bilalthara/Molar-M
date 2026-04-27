@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PrimaryHeader } from "@/components/layout/primary-header";
+import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SecondaryHeader } from "@/components/layout/secondary-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 
@@ -55,6 +56,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-white text-base text-[#0a0f1a]">
+        <ScrollToTop />
         <PrimaryHeader />
         <SecondaryHeader />
         <div className="flex-1">{children}</div>
