@@ -1,0 +1,27 @@
+Total keywords: 2951
+Total unique URLs: 773
+Total compound pages: 767
+Total core pages: 6
+Total mapped to /faq: 32
+
+Top 20 most-used URLs (keyword count):
+/	561
+/calculator	51
+/faq	32
+/molar-mass-of-water	12
+/molar-mass-of-oxygen	12
+/molar-mass-of-nitrogen	11
+/molar-mass-of-sodium-chloride	10
+/molar-mass-of-hydrogen	10
+/molar-mass-of-propanol	10
+/molar-mass-of-sodium-hydroxide	9
+/molar-mass-of-chlorine	9
+/molar-mass-of-ammonia	9
+/molar-mass-of-acetic-acid	9
+/molar-mass-of-hydrochloric-acid	8
+/molar-mass-of-carbon-dioxide	8
+/molar-mass-of-al	8
+/molar-mass-of-carbon-monoxide	8
+/molar-mass-of-c6h12o6	8
+/molar-mass-of-calcium-carbonate	7
+/molar-mass-of-cu	7
