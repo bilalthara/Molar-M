@@ -1,3 +1,6 @@
+export const dynamic = "force-static";
+export const revalidate = false;
+
 import type { Metadata } from "next";
 
 import { robotsNoIndex } from "@/lib/robots-noindex";

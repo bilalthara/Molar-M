@@ -3,16 +3,17 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PrimaryHeader } from "@/components/layout/primary-header";
 import { SITE_URL } from "@/lib/site-config";
-import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SecondaryHeader } from "@/components/layout/secondary-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 
 const geistSans = Geist({
+  display: "swap",
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
+  display: "swap",
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
@@ -57,7 +58,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-white text-base text-[#0a0f1a]">
-        <ScrollToTop />
         <PrimaryHeader />
         <SecondaryHeader />
         <div className="min-w-0 flex-1">{children}</div>

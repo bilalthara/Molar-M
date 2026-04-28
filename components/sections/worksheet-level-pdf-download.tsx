@@ -1,6 +1,7 @@
 "use client";
 
 import { Download } from "lucide-react";
+import type jsPDF from "jspdf";
 
 import { Button } from "@/components/ui/button";
 import { calculateMolarMass } from "@/lib/molar-mass";
@@ -19,7 +20,7 @@ function toSlug(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-function drawChemicalFormula(doc: any, text: string, x: number, y: number) {
+function drawChemicalFormula(doc: jsPDF, text: string, x: number, y: number) {
   let cursorX = x;
   for (const char of text) {
     const isDigit = /\d/.test(char);
