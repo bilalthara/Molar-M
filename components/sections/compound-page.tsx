@@ -345,7 +345,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 [-webkit-overflow-scrolling:touch] [&_sub]:text-[0.7em] [&_td]:px-1.5 [&_td]:py-1 sm:[&_td]:px-2 sm:[&_td]:py-1.5 [&_th]:px-1.5 [&_th]:py-1.5 sm:[&_th]:px-2 sm:[&_th]:py-2">
-                  <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-snug sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
+                  <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-normal sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
                     <TableHeader>
                       <TableRow>
                         <TableHead className="w-[22%] min-w-0 normal-case tracking-tight">Element</TableHead>
@@ -362,21 +362,21 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                     <TableBody>
                       {compound.breakdown.map((row) => (
                         <TableRow key={row.element}>
-                          <TableCell className="min-w-0 break-words leading-snug">{getElementDisplay(row.element)}</TableCell>
+                          <TableCell className="min-w-0 break-words leading-normal">{getElementDisplay(row.element)}</TableCell>
                           <TableCell className="text-center tabular-nums">{row.count}</TableCell>
                           <TableCell className="text-right tabular-nums">{row.atomicMass.toFixed(2)}</TableCell>
-                          <TableCell className="tabular-nums leading-snug">{row.count} x {row.atomicMass.toFixed(2)}</TableCell>
-                          <TableCell className="text-right tabular-nums leading-snug break-words">
+                          <TableCell className="tabular-nums leading-normal">{row.count} x {row.atomicMass.toFixed(2)}</TableCell>
+                          <TableCell className="text-right tabular-nums leading-normal break-words">
                             {row.contribution.toFixed(2)} g/mol
                           </TableCell>
                         </TableRow>
                       ))}
                       <TableRow className="border-t-2 border-slate-200/90 bg-[#f8fafc] hover:bg-[#f1f5f9]">
                         <TableCell colSpan={4}>
-                          <div className="font-semibold leading-snug text-[#0a0f1a]">Final molar mass</div>
-                          <div className="mt-0.5 font-normal leading-snug tabular-nums text-[#0a0f1a]/80">{perElementSum}</div>
+                          <div className="font-semibold leading-normal text-[#0a0f1a]">Final molar mass</div>
+                          <div className="mt-0.5 font-normal leading-normal tabular-nums text-[#0a0f1a]/80">{perElementSum}</div>
                         </TableCell>
-                        <TableCell className="text-right font-semibold leading-snug text-[#0F766E] tabular-nums break-words">
+                        <TableCell className="text-right font-semibold leading-normal text-[#0F766E] tabular-nums break-words">
                           {compound.molarMass.toFixed(2)} g/mol
                         </TableCell>
                       </TableRow>
@@ -463,7 +463,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                 <div className="rounded-lg border border-slate-200/90 bg-white p-4 sm:p-5">
                   <h3 className="text-lg font-semibold">Visual Calculation Chart</h3>
                   <div className="mt-3 min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 [-webkit-overflow-scrolling:touch] [&_sub]:text-[0.7em] [&_td]:px-1.5 [&_td]:py-1 sm:[&_td]:px-2 sm:[&_td]:py-1.5 [&_th]:px-1.5 [&_th]:py-1.5 sm:[&_th]:px-2 sm:[&_th]:py-2">
-                    <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-snug sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
+                    <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-normal sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
                       <TableHeader>
                         <TableRow>
                           <TableHead className="w-[22%] min-w-0 normal-case tracking-tight">Element</TableHead>
@@ -480,23 +480,23 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                       <TableBody>
                         {compound.breakdown.map((row) => (
                           <TableRow key={`visual-${row.element}`}>
-                            <TableCell className="min-w-0 break-words leading-snug">{getElementDisplay(row.element)}</TableCell>
+                            <TableCell className="min-w-0 break-words leading-normal">{getElementDisplay(row.element)}</TableCell>
                             <TableCell className="text-center tabular-nums">{row.count}</TableCell>
                             <TableCell className="text-right tabular-nums">{row.atomicMass.toFixed(3)}</TableCell>
-                            <TableCell className="tabular-nums leading-snug">
+                            <TableCell className="tabular-nums leading-normal">
                               {row.count} x {row.atomicMass.toFixed(3)}
                             </TableCell>
-                            <TableCell className="text-right tabular-nums leading-snug break-words">
+                            <TableCell className="text-right tabular-nums leading-normal break-words">
                               = {row.contribution.toFixed(3)}
                             </TableCell>
                           </TableRow>
                         ))}
                         <TableRow className="border-t-2 border-slate-200/90 bg-[#f8fafc] hover:bg-[#f1f5f9]">
                           <TableCell colSpan={4}>
-                            <div className="font-semibold leading-snug text-[#0a0f1a]">Final molar mass</div>
-                            <div className="mt-0.5 font-normal leading-snug tabular-nums text-[#0a0f1a]/80">{perElementSum}</div>
+                            <div className="font-semibold leading-normal text-[#0a0f1a]">Final molar mass</div>
+                            <div className="mt-0.5 font-normal leading-normal tabular-nums text-[#0a0f1a]/80">{perElementSum}</div>
                           </TableCell>
-                          <TableCell className="text-right font-semibold leading-snug text-[#0F766E] tabular-nums break-words">
+                          <TableCell className="text-right font-semibold leading-normal text-[#0F766E] tabular-nums break-words">
                             = {compound.molarMass.toFixed(3)}
                           </TableCell>
                         </TableRow>
@@ -541,7 +541,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
               </CardHeader>
               <CardContent>
                 <div className="min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 [-webkit-overflow-scrolling:touch] [&_sub]:text-[0.7em] [&_td]:px-1.5 [&_td]:py-1 sm:[&_td]:px-2 sm:[&_td]:py-2">
-                  <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-snug sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
+                  <Table className="w-full min-w-0 max-w-none text-left text-[10px] leading-normal sm:text-xs md:text-sm max-md:table-auto md:table-fixed">
                     <TableHeader>
                       <TableRow>
                         <TableHead className="w-[26%] normal-case tracking-tight sm:w-[22%]">Type</TableHead>
@@ -552,7 +552,11 @@ export function CompoundPage({ compound }: CompoundPageProps) {
                       {compound.reactions.map((reaction) => (
                         <TableRow key={`${reaction.type}-${reaction.equation}`}>
                           <TableCell className="font-medium text-[#0a0f1a]">{reaction.type}</TableCell>
-                          <TableCell className="min-w-0">{formatFormula(reaction.equation)}</TableCell>
+                          <TableCell className="min-w-0">
+                            <span className="inline tracking-[0.03em] [font-variant-ligatures:none]">
+                              {formatFormula(reaction.equation)}
+                            </span>
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

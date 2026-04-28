@@ -1,6 +1,6 @@
 "use client";
 
-import jsPDF from "jspdf";
+import type jsPDF from "jspdf";
 
 const FOOTER_URL = "MolarMassLab.com";
 
@@ -113,11 +113,14 @@ export function drawFormulaText(
     baseFontSize?: number;
     subscriptScale?: number;
     subscriptYOffset?: number;
+    /** Extra horizontal space after each character (pt); improves readability in PDF tables. */
+    charGap?: number;
   },
 ) {
   const baseFontSize = options?.baseFontSize ?? 12;
   const subscriptScale = options?.subscriptScale ?? 0.75;
   const subscriptYOffset = options?.subscriptYOffset ?? 1.8;
+  const charGap = options?.charGap ?? 0;
   const prevFontSize = doc.getFontSize();
   let cursorX = x;
 
@@ -127,7 +130,7 @@ export function drawFormulaText(
     const yPos = isDigit ? y + subscriptYOffset : y;
     doc.setFontSize(fontSize);
     doc.text(ch, cursorX, yPos);
-    cursorX += doc.getTextWidth(ch);
+    cursorX += doc.getTextWidth(ch) + charGap;
   }
 
   doc.setFontSize(prevFontSize);

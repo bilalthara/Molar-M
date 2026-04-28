@@ -20,8 +20,16 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.68;
   text-rendering: optimizeLegibility;
+}
+
+/* Chemical subscripts: slight horizontal room so formulas read clearly (manual <sub> + FormulaSub). */
+sub {
+  margin-inline: 0.08em;
+  font-size: 0.72em;
+  line-height: 1;
+  vertical-align: baseline;
 }
 
 a {

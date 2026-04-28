@@ -32,7 +32,17 @@ export function HomeMolarMassGuide() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-[#0a0f1a]">2. Find atomic masses</h3>
-                <p className="mt-1.5">Use periodic-table atomic masses (amu) for every element in the formula.</p>
+                <p className="mt-1.5">
+                  Use the{" "}
+                  <Link
+                    className="font-medium text-[#0F766E] underline-offset-2 hover:underline"
+                    href={getInternalLink("periodic")}
+                    prefetch={false}
+                  >
+                    periodic table
+                  </Link>{" "}
+                  for element atomic masses (amu) in the formula.
+                </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-[#0a0f1a]">3. Multiply by atom counts</h3>
@@ -76,8 +86,16 @@ export function HomeMolarMassGuide() {
             </CardHeader>
             <CardContent className="space-y-3 text-base leading-relaxed text-[#0a0f1a]">
               <p>
-                Find the element&apos;s atomic mass on the periodic table. That value is the molar mass in g/mol. For example,
-                carbon has an atomic mass of 12.01, so its molar mass is 12.01 g/mol.
+                Find the element&apos;s atomic mass on the{" "}
+                <Link
+                  className="font-medium text-[#0F766E] underline-offset-2 hover:underline"
+                  href={getInternalLink("periodic")}
+                  prefetch={false}
+                >
+                  periodic table
+                </Link>
+                . That value is the molar mass in g/mol. For example, carbon has an atomic mass of 12.01, so its molar mass is
+                12.01 g/mol.
               </p>
               <p>
                 Remember the seven diatomic elements in their natural form: H<sub>2</sub>, N<sub>2</sub>, O<sub>2</sub>,

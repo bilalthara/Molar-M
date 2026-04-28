@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { cn } from "@/lib/utils";
+
 type FormulaSubProps = {
   formula: string;
   className?: string;
@@ -8,6 +10,7 @@ type FormulaSubProps = {
 /**
  * Renders a chemical formula with numeric subscripts as semantic <sub> elements
  * (e.g. H<sub>2</sub>O). Safe for titles, links, and body copy. Use plain formula strings in JSON-LD metadata.
+ * Default spacing improves readability sitewide; pass `className` to merge or override.
  */
 export function FormulaSub({ formula, className }: FormulaSubProps) {
   if (!formula) {
@@ -27,5 +30,14 @@ export function FormulaSub({ formula, className }: FormulaSubProps) {
   if (last < formula.length) {
     nodes.push(formula.slice(last));
   }
-  return <span className={className}>{nodes}</span>;
+  return (
+    <span
+      className={cn(
+        "inline max-w-none align-baseline tracking-[0.03em] [font-variant-ligatures:none]",
+        className,
+      )}
+    >
+      {nodes}
+    </span>
+  );
 }

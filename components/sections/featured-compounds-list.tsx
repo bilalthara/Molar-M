@@ -35,8 +35,8 @@ export function FeaturedCompoundsList() {
   return (
     <Reveal>
       <Card className="border-slate-200/90 bg-white">
-        <CardContent className="pt-6">
-          <ul className="grid grid-cols-1 gap-x-10 gap-y-2 text-base md:grid-cols-2">
+        <CardContent className="px-4 pb-8 pt-8 sm:px-5 sm:pb-8 sm:pt-8">
+          <ul className="grid grid-cols-1 gap-x-10 gap-y-3 text-base leading-relaxed md:grid-cols-2">
             {featuredColumns.flatMap((group) => group.compounds).slice(0, 36).map((compound) => (
               <li key={`featured-${compound.slug}`}>
                 <Link

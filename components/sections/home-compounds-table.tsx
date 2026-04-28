@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { Download } from "lucide-react";
 import { useMemo, useState } from "react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 
 import { Button } from "@/components/ui/button";
 import { FormulaSub } from "@/components/ui/formula-sub";
@@ -12,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { CompoundEntry } from "@/lib/compound-data";
 import { getCompoundHref, highVolumeMolarMassFormulas } from "@/lib/compound-data";
-import { drawPremiumPdfChrome, loadPdfLogoDataUrl } from "@/lib/pdf-template";
+import { drawFormulaText, drawPremiumPdfChrome, loadPdfLogoDataUrl } from "@/lib/pdf-template";
 
 type HomeCompoundsTableProps = {
   compounds: CompoundEntry[];
@@ -66,21 +64,80 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
   }, [compounds, filterBy, popularityOrder, query]);
 
   const onDownloadPdf = async () => {
-    const doc = new jsPDF();
+    const [{ default: JsPDF }, { default: autoTable }] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
+    const doc = new JsPDF();
     const logoDataUrl = await loadPdfLogoDataUrl();
     drawPremiumPdfChrome(doc, "Popular Compounds Molar Mass Table", `${rows.length} filtered records`, logoDataUrl);
+
+    const prevLineHeightFactor =
+      typeof doc.getLineHeightFactor === "function" ? doc.getLineHeightFactor() : undefined;
+    if (typeof doc.setLineHeightFactor === "function") {
+      doc.setLineHeightFactor(1.5);
+    }
+
     autoTable(doc, {
       startY: 36,
       head: [["#", "Compound", "Formula", "Molar Mass (g/mol)"]],
-      body: rows.map((row, index) => [String(index + 1), row.name, row.formula, row.molarMass.toFixed(2)]),
+      body: rows.map((row, index) => [
+        String(index + 1),
+        row.name,
+        row.formula,
+        `${row.molarMass.toFixed(2)} g/mol`,
+      ]),
+      styles: {
+        halign: "left",
+        valign: "middle",
+        cellPadding: { top: 5.5, right: 4, bottom: 5.5, left: 4 },
+      },
+      bodyStyles: {
+        fontSize: 10,
+        minCellHeight: 10,
+      },
       headStyles: {
         fillColor: [31, 163, 122],
+        textColor: [255, 255, 255],
+        halign: "left",
+        valign: "middle",
+        fontStyle: "bold",
+        cellPadding: { top: 5, right: 4, bottom: 5, left: 4 },
+      },
+      columnStyles: {
+        0: { halign: "center", cellWidth: 16 },
+        1: { halign: "left" },
+        2: { halign: "left", cellWidth: 42 },
+        3: { halign: "right" },
       },
       margin: { top: 36, bottom: 16 },
+      /** Helvetica cannot render Unicode subscripts; skip default text, then draw with `drawFormulaText`. */
+      willDrawCell: (data) => {
+        if (data.section === "body" && data.column.index === 2) {
+          data.cell.text = [""];
+        }
+      },
+      didDrawCell: (data) => {
+        if (data.section !== "body" || data.column.index !== 2) return;
+        const entry = rows[data.row.index];
+        if (!entry) return;
+        const pos = data.cell.getTextPos();
+        data.doc.setFont("helvetica", "normal");
+        data.doc.setTextColor(20, 24, 30);
+        const baseSize = Math.min(data.cell.styles.fontSize ?? 10, 10);
+        drawFormulaText(data.doc, entry.formula, pos.x, pos.y, {
+          baseFontSize: baseSize,
+          subscriptScale: 0.72,
+          subscriptYOffset: 1.35,
+          charGap: 0.42,
+        });
+      },
       didDrawPage: () => {
         drawPremiumPdfChrome(doc, "Popular Compounds Molar Mass Table", `${rows.length} filtered records`, logoDataUrl);
       },
     });
+
+    if (prevLineHeightFactor !== undefined && typeof doc.setLineHeightFactor === "function") {
+      doc.setLineHeightFactor(prevLineHeightFactor);
+    }
+
     doc.save("popular-compounds-molar-mass-table.pdf");
   };
 
@@ -121,7 +178,7 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
               : "max-h-[28rem] min-w-0 overflow-x-auto overflow-y-auto overscroll-contain"
           }
         >
-          <Table className="w-full min-w-0 table-fixed text-left text-[10px] leading-snug text-[#0F172A] sm:text-xs md:text-sm [&_sub]:text-[0.7em] [&_td]:font-normal [&_th]:font-semibold [&_th]:normal-case [&_th]:tracking-normal">
+          <Table className="w-full min-w-0 table-fixed text-left text-[10px] leading-normal text-[#0F172A] sm:text-xs md:text-sm lg:text-[15px] lg:leading-relaxed xl:text-base [&_sub]:text-[0.7em] lg:[&_sub]:text-[0.68em] [&_td]:font-normal [&_th]:font-semibold [&_th]:normal-case [&_th]:tracking-normal">
             <TableHeader className="sticky top-0 z-10 bg-white shadow-[0_1px_0_0_rgb(226_232_240)]">
               <TableRow>
                 <TableHead className="w-9 text-center sm:w-11">#</TableHead>
@@ -134,7 +191,7 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
               {rows.map((compound, index) => (
                 <TableRow key={compound.formula}>
                   <TableCell className="text-center tabular-nums text-[#0a0f1a]/70">{index + 1}</TableCell>
-                  <TableCell className="min-w-0 break-words leading-snug">
+                  <TableCell className="min-w-0 break-words leading-normal">
                     <Link
                       className="font-normal text-inherit text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
                       href={getCompoundHref(compound.formula)}
@@ -143,10 +200,10 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
                       {compound.name}
                     </Link>
                   </TableCell>
-                  <TableCell className="min-w-0 break-words leading-snug text-[#0F766E]">
+                  <TableCell className="min-w-0 break-words leading-normal text-[#0F766E]">
                     <FormulaSub formula={compound.formula} />
                   </TableCell>
-                  <TableCell className="text-right tabular-nums leading-snug">{compound.molarMass.toFixed(2)} g/mol</TableCell>
+                  <TableCell className="text-right tabular-nums leading-normal">{compound.molarMass.toFixed(2)} g/mol</TableCell>
                 </TableRow>
               ))}
             </TableBody>

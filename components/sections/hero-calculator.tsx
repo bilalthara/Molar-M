@@ -32,12 +32,6 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
 
   const suggestions = useMemo(() => getCompoundSuggestions(formula, 60), [formula]);
 
-  useEffect(() => {
-    if (suggestions.length === 0) {
-      setSuggestionsOpen(false);
-    }
-  }, [suggestions.length]);
-
   /** Desktop (md+): close suggestions when clicking outside. Mobile: only X or picking a row closes. */
   useEffect(() => {
     if (!suggestionsOpen || suggestions.length === 0) return;
@@ -168,6 +162,7 @@ export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
                         {suggestions.map((row) => (
                           <li key={row.formula} role="presentation">
                             <button
+                              aria-selected={false}
                               className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm text-[#0a0f1a] hover:bg-emerald-50"
                               onMouseDown={(event) => {
                                 event.preventDefault();

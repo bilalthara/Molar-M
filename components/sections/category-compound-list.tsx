@@ -9,7 +9,7 @@ type CategoryCompoundListProps = {
 
 export function CategoryCompoundList({ compounds }: CategoryCompoundListProps) {
   return (
-    <ul className="grid grid-cols-1 gap-x-8 gap-y-2 text-base md:grid-cols-2">
+    <ul className="grid grid-cols-1 gap-x-8 gap-y-3 text-base leading-relaxed md:grid-cols-2">
       {compounds.map((compound) => (
         <li key={compound.formula}>
           <Link

@@ -14,7 +14,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormulaSub } from "@/components/ui/formula-sub";
 import { homeFaq } from "@/lib/home-faq";
 import { compounds, getCompoundHref, getHighVolumeMolarMassPageLinks } from "@/lib/compound-data";
-import { getInternalLink } from "@/lib/internal-links";
 
 const exploreMolarMassHub = getHighVolumeMolarMassPageLinks();
 const allCompoundsTableRows = [...compounds];
@@ -54,9 +53,11 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 pt-7 pb-6 sm:px-6" id="featured">
-        <h2 className="mb-5 text-[1.8rem] font-bold tracking-tight text-[#0a0f1a]">Featured compounds</h2>
-        <FeaturedCompoundsList />
+      <section className="mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 py-6 sm:px-6" id="featured">
+        <h2 className="mb-2 text-[1.8rem] font-bold tracking-tight text-[#0a0f1a] sm:mb-3">Featured compounds</h2>
+        <div className="mt-4 sm:mt-5">
+          <FeaturedCompoundsList />
+        </div>
       </section>
 
       <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
@@ -96,6 +97,11 @@ export default function Home() {
               <p>
                 In medicine and industry, measured compounds are converted between grams and moles to keep dosage and production
                 consistent. That is why molar mass is treated as a core skill, not just an exam topic.
+              </p>
+              <p>
+                The lightest possible chemical that one can have under normal conditions is hydrogen gas, or{" "}
+                <FormulaSub formula="H2" />. There is no limit to how heavy a chemical compound can be - it is not uncommon for
+                macromolecules (large organic or bioorganic compounds such as DNA) to weigh thousands of grams per mole.
               </p>
             </CardContent>
           </Card>
