@@ -1,4 +1,5 @@
 import type { CompoundEntry } from "@/lib/compound-data";
+import { SITE_URL } from "@/lib/site-config";
 
 type StructuredDataProps = {
   compound?: CompoundEntry;
@@ -6,7 +7,7 @@ type StructuredDataProps = {
 };
 
 export function StructuredData({ compound, isHome }: StructuredDataProps) {
-  const baseUrl = "https://molarmass.app";
+  const baseUrl = SITE_URL;
 
   const homeGraph = [
     {

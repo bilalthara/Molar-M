@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PrimaryHeader } from "@/components/layout/primary-header";
+import { SITE_URL } from "@/lib/site-config";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SecondaryHeader } from "@/components/layout/secondary-header";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://molarmass.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Molar Mass Calculator & Compound Database",
     template: "%s | MolarMass",
