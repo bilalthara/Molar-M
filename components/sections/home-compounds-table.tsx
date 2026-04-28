@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Download } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FormulaSub } from "@/components/ui/formula-sub";
@@ -27,6 +27,8 @@ const filterOptions = [
 export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompoundsTableProps) {
   const [query, setQuery] = useState("");
   const [filterBy, setFilterBy] = useState<(typeof filterOptions)[number]["value"]>("alphabet");
+  const scrollWrapRef = useRef<HTMLDivElement>(null);
+  const [viewport, setViewport] = useState({ height: 0, scrollTop: 0 });
 
   const popularityOrder = useMemo(() => {
     const map = new Map<string, number>();
@@ -36,6 +38,36 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
     return map;
   }, []);
 
+  useEffect(() => {
+    if (fullPage) return;
+    const el = scrollWrapRef.current;
+    if (!el) return;
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      setViewport((prev) => {
+        const next = { height: el.clientHeight, scrollTop: el.scrollTop };
+        return prev.height === next.height && prev.scrollTop === next.scrollTop ? prev : next;
+      });
+    };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(update);
+    };
+
+    update();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    const ro = new ResizeObserver(() => update());
+    ro.observe(el);
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", onScroll);
+      ro.disconnect();
+    };
+  }, [fullPage]);
+
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
     const filtered = compounds.filter((compound) => {
@@ -43,14 +75,21 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
       return compound.name.toLowerCase().includes(q) || compound.formula.toLowerCase().includes(q);
     });
 
+    // Fast path: avoid copying/sorting unless needed.
+    if (filterBy === "alphabet" && !q) {
+      return filtered;
+    }
+
     const sorted = [...filtered];
-    if (filterBy === "alphabet") {
-      sorted.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
-    } else if (filterBy === "molar-amount") {
+    if (filterBy === "molar-amount") {
       sorted.sort((a, b) => a.molarMass - b.molarMass || a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
-    } else if (filterBy === "molar-amount-desc") {
+      return sorted;
+    }
+    if (filterBy === "molar-amount-desc") {
       sorted.sort((a, b) => b.molarMass - a.molarMass || a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
-    } else {
+      return sorted;
+    }
+    if (filterBy === "most-popular") {
       sorted.sort((a, b) => {
         const aRank = popularityOrder.get(a.formula.toLowerCase());
         const bRank = popularityOrder.get(b.formula.toLowerCase());
@@ -59,9 +98,28 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
         if (bRank !== undefined) return 1;
         return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
       });
+      return sorted;
     }
+    sorted.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
     return sorted;
   }, [compounds, filterBy, popularityOrder, query]);
+
+  const virtual = useMemo(() => {
+    if (fullPage) {
+      return { startIndex: 0, endIndex: rows.length, topPadPx: 0, bottomPadPx: 0 };
+    }
+    // Virtualize long lists to reduce DOM cost (table is in a fixed-height scroll container).
+    const rowHeight = 40; // px, approximate across responsive sizes.
+    const overscan = 12;
+    const visibleCount = viewport.height ? Math.ceil(viewport.height / rowHeight) + overscan : 80;
+    const startIndex = Math.max(0, Math.floor(viewport.scrollTop / rowHeight) - Math.floor(overscan / 2));
+    const endIndex = Math.min(rows.length, startIndex + visibleCount);
+    const topPadPx = startIndex * rowHeight;
+    const bottomPadPx = Math.max(0, (rows.length - endIndex) * rowHeight);
+    return { startIndex, endIndex, topPadPx, bottomPadPx };
+  }, [fullPage, rows.length, viewport.height, viewport.scrollTop]);
+
+  const visibleRows = fullPage ? rows : rows.slice(virtual.startIndex, virtual.endIndex);
 
   const onDownloadPdf = async () => {
     const [{ default: JsPDF }, { default: autoTable }] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
@@ -172,6 +230,7 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
 
       <div className="min-w-0 overflow-hidden rounded-lg border border-slate-200">
         <div
+          ref={scrollWrapRef}
           className={
             fullPage
               ? "min-w-0 overflow-x-auto overflow-y-visible"
@@ -188,9 +247,16 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map((compound, index) => (
+              {virtual.topPadPx ? (
+                <TableRow aria-hidden>
+                  <TableCell colSpan={4} style={{ height: `${virtual.topPadPx}px`, padding: 0, border: 0 }} />
+                </TableRow>
+              ) : null}
+              {visibleRows.map((compound, index) => (
                 <TableRow key={compound.formula}>
-                  <TableCell className="text-center tabular-nums text-[#0a0f1a]/70">{index + 1}</TableCell>
+                  <TableCell className="text-center tabular-nums text-[#0a0f1a]/70">
+                    {fullPage ? index + 1 : virtual.startIndex + index + 1}
+                  </TableCell>
                   <TableCell className="min-w-0 break-words leading-normal">
                     <Link
                       className="font-normal text-inherit text-[#0F766E] underline decoration-[#0F766E]/50 underline-offset-2 hover:text-[#0d5c56] hover:decoration-[#0F766E]"
@@ -206,6 +272,11 @@ export function HomeCompoundsTable({ compounds, fullPage = false }: HomeCompound
                   <TableCell className="text-right tabular-nums leading-normal">{compound.molarMass.toFixed(2)} g/mol</TableCell>
                 </TableRow>
               ))}
+              {virtual.bottomPadPx ? (
+                <TableRow aria-hidden>
+                  <TableCell colSpan={4} style={{ height: `${virtual.bottomPadPx}px`, padding: 0, border: 0 }} />
+                </TableRow>
+              ) : null}
             </TableBody>
           </Table>
         </div>

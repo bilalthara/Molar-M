@@ -1,11 +1,10 @@
-"use client";
-
 import Link from "next/link";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode } from "react";
 import { Atom, BookOpen, CircleHelp, Lightbulb } from "lucide-react";
 
 import { CompoundCopyAnswerButton } from "@/components/sections/compound-copy-button";
 import { DownloadPdfButtons } from "@/components/sections/download-pdf-buttons";
+import { CompoundPageSidebar } from "@/components/sections/compound-page-sidebar";
 import { Reveal } from "@/components/sections/reveal";
 import { FaqAccordion } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
@@ -158,57 +157,6 @@ const pageSections = [
 ];
 
 export function CompoundPage({ compound }: CompoundPageProps) {
-  const [activeSectionId, setActiveSectionId] = useState(pageSections[0]?.id ?? "answer-box");
-
-  useEffect(() => {
-    const sectionElements = pageSections
-      .map((section) => document.getElementById(section.id))
-      .filter((node): node is HTMLElement => Boolean(node));
-    if (!sectionElements.length) return;
-
-    let ticking = false;
-    const activateCurrentSection = () => {
-      const topOffset = 170;
-      const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 4;
-      if (scrolledToBottom) {
-        const lastId = sectionElements[sectionElements.length - 1]?.id ?? sectionElements[0].id;
-        setActiveSectionId((prev) => (prev === lastId ? prev : lastId));
-        ticking = false;
-        return;
-      }
-
-      const byDistance = sectionElements
-        .map((sectionEl) => ({
-          id: sectionEl.id,
-          distance: Math.abs(sectionEl.getBoundingClientRect().top - topOffset),
-          top: sectionEl.getBoundingClientRect().top,
-        }))
-        .sort((a, b) => {
-          if (a.top <= topOffset && b.top > topOffset) return -1;
-          if (a.top > topOffset && b.top <= topOffset) return 1;
-          return a.distance - b.distance;
-        });
-
-      const currentId = byDistance[0]?.id ?? sectionElements[0].id;
-      setActiveSectionId((prev) => (prev === currentId ? prev : currentId));
-      ticking = false;
-    };
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(activateCurrentSection);
-    };
-
-    activateCurrentSection();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
   const popularSidebarLinks = getHighVolumeMolarMassPageLinks().filter(
     (row) => row.formula.toLowerCase() !== compound.formula.toLowerCase(),
   );
@@ -806,27 +754,7 @@ export function CompoundPage({ compound }: CompoundPageProps) {
 
         <aside className="hidden min-h-0 lg:block">
           <div className="sticky top-28 flex max-h-[calc(100vh-7rem)] flex-col gap-4">
-            <div className="shrink-0 space-y-3 rounded-xl border border-slate-200/90 bg-white p-4">
-              <p className="text-sm font-semibold text-[#0a0f1a]">On this page</p>
-              <nav className="space-y-1.5">
-                {pageSections.map((section) => (
-                  <button
-                    key={section.id}
-                    className={`w-full cursor-pointer rounded-md border-l-2 px-2 py-1 text-left text-sm transition-colors duration-150 ${
-                      activeSectionId === section.id
-                        ? "border-[#0F766E] font-semibold text-[#0F766E]"
-                        : "border-transparent text-[#0a0f1a] hover:border-slate-300 hover:text-[#0F766E]"
-                    }`}
-                    onClick={() =>
-                      document.getElementById(section.id)?.scrollIntoView({ behavior: "smooth", block: "start" })
-                    }
-                    type="button"
-                  >
-                    {section.label}
-                  </button>
-                ))}
-              </nav>
-            </div>
+            <CompoundPageSidebar sections={pageSections} />
             <div className="flex min-h-[18rem] flex-1 flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white p-4">
               <p className="shrink-0 text-sm font-semibold text-[#0a0f1a]">Most popular molar mass calculations</p>
               <nav className="mt-2 min-h-[14rem] max-h-[min(28rem,calc(100vh-15rem))] flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 text-sm leading-snug">

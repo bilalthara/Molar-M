@@ -1,6 +1,5 @@
 "use client";
 
-import jsPDF from "jspdf";
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ function toSlug(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-function drawChemicalFormula(doc: jsPDF, text: string, x: number, y: number) {
+function drawChemicalFormula(doc: any, text: string, x: number, y: number) {
   let cursorX = x;
   for (const char of text) {
     const isDigit = /\d/.test(char);
@@ -35,7 +34,8 @@ function drawChemicalFormula(doc: jsPDF, text: string, x: number, y: number) {
 
 export function WorksheetLevelPdfDownload({ levelTitle, formulas, withAnswers = false }: WorksheetLevelPdfDownloadProps) {
   const onDownload = async () => {
-    const doc = new jsPDF();
+    const { default: JsPDF } = await import("jspdf");
+    const doc = new JsPDF();
     const logoDataUrl = await loadPdfLogoDataUrl();
     const subtitle = withAnswers ? "Questions with answers" : "Questions only";
     let y = 40;

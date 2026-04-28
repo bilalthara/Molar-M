@@ -34,7 +34,10 @@ export default function Home() {
 
       <HomeMolarMassGuide />
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6" id="compounds-table">
+      <section
+        className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6"
+        id="compounds-table"
+      >
         <Reveal>
           <Card className="bg-white">
             <CardHeader>
@@ -47,20 +50,26 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 py-6 sm:px-6" id="formula-format">
+      <section
+        className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 py-6 sm:px-6"
+        id="formula-format"
+      >
         <Reveal>
           <FormulaWritingTips />
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 py-6 sm:px-6" id="featured">
+      <section
+        className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200/90 px-4 py-6 sm:px-6"
+        id="featured"
+      >
         <h2 className="mb-2 text-[1.8rem] font-bold tracking-tight text-[#0a0f1a] sm:mb-3">Featured compounds</h2>
         <div className="mt-4 sm:mt-5">
           <FeaturedCompoundsList />
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+      <section className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
         <Reveal>
           <Card className="bg-white">
             <CardHeader>
@@ -75,7 +84,7 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+      <section className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
         <Reveal>
           <Card className="border-slate-200/90 bg-white">
             <CardHeader>
@@ -108,7 +117,7 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+      <section className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
         <Reveal>
           <Card className="border-slate-200/90 bg-white">
             <CardHeader>
@@ -133,7 +142,7 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+      <section className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
         <Reveal>
           <Card className="border-slate-200/90 bg-white">
             <CardHeader>
@@ -160,7 +169,7 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
+      <section className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 sm:px-6">
         <Reveal>
         <Card className="border-slate-200/90 bg-white">
           <CardHeader>
@@ -188,7 +197,10 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 pb-9 sm:px-6" id="faq">
+      <section
+        className="cv-auto mx-auto w-full max-w-6xl border-t border-slate-200 px-4 py-6 pb-9 sm:px-6"
+        id="faq"
+      >
         <h2 className="mb-4 text-2xl font-bold tracking-tight text-[#0a0f1a]">FAQ</h2>
         <FaqAccordion items={homeFaq} />
       </section>

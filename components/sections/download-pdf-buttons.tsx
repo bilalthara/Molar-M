@@ -1,7 +1,5 @@
 "use client";
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +15,8 @@ export function DownloadPdfButtons({ compound }: DownloadPdfButtonsProps) {
   const fileBase = `Molar Mass of ${compound.name} (${compound.formula})`;
 
   const onDownloadAnswer = async () => {
-    const doc = new jsPDF();
+    const [{ default: JsPDF }, { default: autoTable }] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
+    const doc = new JsPDF();
     const logoDataUrl = await loadPdfLogoDataUrl();
     drawPremiumPdfChrome(doc, "Molar Mass Answer:", compound.name, logoDataUrl);
     doc.setFont("helvetica", "bold");

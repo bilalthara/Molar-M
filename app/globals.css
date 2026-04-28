@@ -84,3 +84,12 @@ html {
   background: #ffffff;
 }
 
+/**
+ * Performance: allow the browser to skip rendering offscreen content until needed.
+ * This is a no-UI-change win for long pages with large DOM sections below the fold.
+ */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}
+
