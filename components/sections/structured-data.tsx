@@ -51,7 +51,7 @@ export function StructuredData({ compound, isHome }: StructuredDataProps) {
         {
           "@context": "https://schema.org",
           "@type": "Article",
-          headline: `Molar Mass of ${compound.formula}`,
+          headline: `Molar Mass of ${compound.name} (${compound.formula})`,
           description: compound.summary,
           author: { "@type": "Organization", name: "MolarMass" },
           publisher: { "@type": "Organization", name: "MolarMass" },
@@ -78,7 +78,7 @@ export function StructuredData({ compound, isHome }: StructuredDataProps) {
             {
               "@type": "ListItem",
               position: 2,
-              name: `Molar Mass for ${compound.formula}`,
+              name: `Molar Mass of ${compound.name} (${compound.formula})`,
               item: `${baseUrl}/${compound.canonicalSlug}`,
             },
           ],
@@ -86,8 +86,8 @@ export function StructuredData({ compound, isHome }: StructuredDataProps) {
         {
           "@context": "https://schema.org",
           "@type": "Dataset",
-          name: `${compound.formula} molar mass dataset`,
-          description: `Element breakdown and molar mass values for ${compound.formula}.`,
+          name: `Molar mass of ${compound.name} (${compound.formula})`,
+          description: `Element breakdown and molar mass values for ${compound.name} (${compound.formula}).`,
           creator: { "@type": "Organization", name: "MolarMass" },
           license: "https://creativecommons.org/licenses/by/4.0/",
         },

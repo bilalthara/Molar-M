@@ -1,16 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { getStaticCompounds } from "@/lib/compound-data";
+import { compoundNameToMolarMassPath, getStaticCompounds } from "@/lib/compound-data";
 import { SITE_URL } from "@/lib/site-config";
-
-function toNameSlug(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part.toLowerCase())
-    .join("-")
-    .replace(/[^A-Za-z0-9-]/g, "");
-}
 
 /** Single sitemap at `/sitemap.xml` (using `generateSitemaps` would serve `/sitemap/0.xml` instead). */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -43,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const compoundUrls: MetadataRoute.Sitemap = compounds.map((compound) => ({
-    url: `${SITE_URL}/molar-mass-of-${toNameSlug(compound.name)}`,
+    url: `${SITE_URL}/${compoundNameToMolarMassPath(compound.name)}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.8,

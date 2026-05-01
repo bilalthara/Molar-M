@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import { CompoundPage } from "@/components/sections/compound-page";
 import { StructuredData } from "@/components/sections/structured-data";
@@ -65,6 +65,10 @@ export default async function CompoundSlugPage({ params }: CompoundRouteProps) {
   const compound = getCompoundData(normalized);
   if (!compound) notFound();
   if (isInvalidGeneratedName(compound.name) || isBlockedSyntheticPattern(compound.name)) notFound();
+
+  if (normalized.toLowerCase() !== compound.canonicalSlug.toLowerCase()) {
+    permanentRedirect(`/${compound.canonicalSlug}`);
+  }
 
   return (
     <>

@@ -18,7 +18,7 @@ const top500Compounds = compounds.slice(0, 500);
 
 export default function MolarMassListTop500Page() {
   return (
-    <main className="bg-white px-4 pt-24 pb-10 text-[#0a0f1a] sm:px-6">
+    <main className="bg-white px-4 pt-6 sm:pt-8 pb-10 text-[#0a0f1a] sm:px-6">
       <section className="mx-auto w-full max-w-[1200px] space-y-6">
         <header className="space-y-3">
           <h1 className="text-3xl font-bold tracking-tight text-[#0a0f1a] sm:text-4xl">Molar Mass List (Top 500 Compounds)</h1>

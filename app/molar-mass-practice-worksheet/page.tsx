@@ -131,7 +131,7 @@ const levels: Level[] = [
 
 export default function MolarMassPracticeWorksheetPage() {
   return (
-    <main className="bg-white px-4 pt-24 pb-12 text-[#0a0f1a] sm:px-6">
+    <main className="bg-white px-4 pt-6 sm:pt-8 pb-12 text-[#0a0f1a] sm:px-6">
       <article className="mx-auto max-w-3xl space-y-8 text-base leading-relaxed text-[#0a0f1a]/90">
         <header>
           <h1 className="text-3xl font-bold tracking-tight text-[#0a0f1a] sm:text-4xl">Molar Mass Practice Worksheet</h1>

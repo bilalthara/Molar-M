@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function AboutUsPage() {
   return (
-    <main className="bg-white px-4 pt-24 pb-12 text-[#0a0f1a] sm:px-6">
+    <main className="bg-white px-4 pt-6 sm:pt-8 pb-12 text-[#0a0f1a] sm:px-6">
       <div className="mx-auto w-full max-w-6xl space-y-8">
         <section className="rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white to-emerald-50 px-6 py-8 sm:px-8">
           <Image

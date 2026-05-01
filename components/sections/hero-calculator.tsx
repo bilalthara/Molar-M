@@ -9,7 +9,7 @@ type HeroCalculatorProps = {
 
 export function HeroCalculator({ variant = "home" }: HeroCalculatorProps) {
   return (
-    <section className="mx-auto w-full max-w-6xl border-b border-slate-200/90 px-4 pb-8 pt-[7.5rem] sm:px-6 md:pt-24">
+    <section className="mx-auto w-full max-w-6xl border-b border-slate-200/90 px-4 pb-8 pt-6 sm:px-6 md:pt-8">
       <div className="space-y-4">
         <Badge>Accurate molar mass data for homework, exams &amp; labs</Badge>
         {variant === "calculator" ? (

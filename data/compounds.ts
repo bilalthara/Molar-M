@@ -113,11 +113,13 @@ const roots1to30 = [
 function hydrocarbonSeries(): CompoundRecord[] {
   const rows: CompoundRecord[] = [];
   for (let n = 1; n <= 30; n += 1) {
+    // Use conventional CH4 (not C1H4) so URLs and parser output match the dataset row.
+    const formula = n === 1 ? "CH4" : `C${n}H${2 * n + 2}`;
     rows.push({
-      formula: `C${n}H${2 * n + 2}`,
+      formula,
       name: `${roots1to30[n]}ane`,
       category: "organic",
-      aliases: makeAliases(`C${n}H${2 * n + 2}`, `${roots1to30[n]}ane`),
+      aliases: makeAliases(formula, `${roots1to30[n]}ane`),
     });
   }
   for (let n = 2; n <= 20; n += 1) {

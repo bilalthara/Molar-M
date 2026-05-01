@@ -150,6 +150,11 @@ function makeNameBasedPath(name: string) {
   return `molar-mass-of-${toNameSlug(name).toLowerCase()}`;
 }
 
+/** URL path segment for a compound hub page, aligned with each entry's `canonicalSlug`. */
+export function compoundNameToMolarMassPath(name: string) {
+  return makeNameBasedPath(name.trim());
+}
+
 function decodeRouteValue(value: string) {
   try {
     return decodeURIComponent(value);
@@ -497,6 +502,24 @@ function buildDynamicCompoundEntry(calculated: FormulaResult): CompoundEntry {
   return entry;
 }
 
+function breakdownCompositionKey(rows: { element: string; count: number }[]) {
+  return [...rows]
+    .sort((a, b) => a.element.localeCompare(b.element))
+    .map((r) => `${r.element}:${r.count}`)
+    .join("|");
+}
+
+function findCompoundMatchingParsedResult(parsed: FormulaResult) {
+  const key = breakdownCompositionKey(parsed.breakdown);
+  return (
+    compounds.find((compound) => compound.formula.toLowerCase() === parsed.formula.toLowerCase()) ??
+    compounds.find((compound) => {
+      const cr = calculateMolarMass(compound.formula);
+      return cr !== null && breakdownCompositionKey(cr.breakdown) === key;
+    })
+  );
+}
+
 export function getCompoundData(raw: string): CompoundEntry | null {
   const decodedRaw = decodeRouteValue(raw).trim();
   if (!decodedRaw) {
@@ -519,9 +542,7 @@ export function getCompoundData(raw: string): CompoundEntry | null {
 
   const parsed = parseFormulaStrict(decodedRaw);
   if (parsed) {
-    const existing = compounds.find(
-      (compound) => compound.formula.toLowerCase() === parsed.formula.toLowerCase(),
-    );
+    const existing = findCompoundMatchingParsedResult(parsed);
     if (existing) {
       return existing;
     }
@@ -538,9 +559,7 @@ export function getCompoundData(raw: string): CompoundEntry | null {
     return null;
   }
 
-  const existing = compounds.find(
-    (compound) => compound.formula.toLowerCase() === calculated.formula.toLowerCase(),
-  );
+  const existing = findCompoundMatchingParsedResult(calculated);
   if (existing) {
     return existing;
   }

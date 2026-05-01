@@ -17,7 +17,7 @@ const organicCompounds = compounds.filter((compound) => compound.category === "o
 
 export default function OrganicCompoundsMolarMassPage() {
   return (
-    <main className="bg-white px-4 pt-24 pb-12 text-[#0a0f1a] sm:px-6">
+    <main className="bg-white px-4 pt-6 sm:pt-8 pb-12 text-[#0a0f1a] sm:px-6">
       <article className="mx-auto w-full max-w-6xl space-y-6">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Organic Compounds Molar Mass</h1>
         <p className="max-w-4xl text-base leading-relaxed text-[#0a0f1a]/85">

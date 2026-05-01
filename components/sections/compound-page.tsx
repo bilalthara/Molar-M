@@ -205,12 +205,12 @@ export function CompoundPage({ compound }: CompoundPageProps) {
     ) : null;
 
   return (
-    <section className="mx-auto w-full min-w-0 max-w-6xl px-4 pb-8 pt-[7.5rem] text-[#0a0f1a] sm:px-6 md:pt-24">
+    <section className="mx-auto w-full min-w-0 max-w-6xl px-4 pb-8 pt-6 text-[#0a0f1a] sm:px-6 md:pt-8">
       <div className="mb-6 flex min-w-0 flex-wrap items-center gap-2 text-sm text-[#0a0f1a]/80">
         <span className="font-medium text-[#0a0f1a]/70">Molar Mass Lab</span>
         <span>/</span>
         <span>
-          Molar mass for <FormulaSub formula={compound.formula} />
+          Molar Mass of {compound.name} (<FormulaSub formula={compound.formula} />)
         </span>
       </div>
 

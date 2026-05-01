@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function FaqPage() {
   return (
-    <main className="bg-white px-4 pt-24 pb-12 text-[#0a0f1a] sm:px-6">
+    <main className="bg-white px-4 pt-6 sm:pt-8 pb-12 text-[#0a0f1a] sm:px-6">
       <div className="mx-auto w-full max-w-6xl">
         <h1 className="text-3xl font-bold tracking-tight text-[#0a0f1a] sm:text-4xl">FAQ</h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#0a0f1a]/85">

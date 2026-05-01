@@ -9,7 +9,7 @@ const tickerFormulas = getSubheaderTickerFormulas(100);
 
 export function SecondaryHeader() {
   return (
-    <div className="secondary-ticker z-[45] w-full border-b border-emerald-950/15 bg-[#1FA37A] max-md:fixed max-md:left-0 max-md:right-0 max-md:top-16 md:sticky md:top-16">
+    <div className="secondary-ticker sticky top-0 z-[45] w-full border-b border-emerald-950/15 bg-[#1FA37A]">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 sm:gap-4 sm:px-6">
         <Link
           aria-label="Molar Mass Lab home"
