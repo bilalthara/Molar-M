@@ -14,15 +14,18 @@ export function SiteLogo({ className, priority = false }: SiteLogoProps) {
   return (
     <Link
       href="/"
-      className={cn("inline-flex h-9 w-[170px] shrink-0 items-center no-underline sm:w-[190px]", className)}
+      className={cn(
+        "inline-flex h-8 w-[132px] shrink-0 items-center no-underline min-[380px]:h-9 min-[380px]:w-[160px] sm:w-[190px]",
+        className,
+      )}
       aria-label={`${SITE_NAME} home`}
     >
-      <span className="relative block h-9 w-full">
+      <span className="relative block h-full w-full min-w-0">
         <Image
           src="/logo-light-v2.png"
           alt={`${SITE_NAME} logo`}
           fill
-          sizes="190px"
+          sizes="(max-width: 380px) 132px, (max-width: 640px) 160px, 190px"
           priority={priority}
           className="logo-img-light object-contain object-left"
           title={`${SITE_NAME} — chemistry learning platform`}
@@ -31,7 +34,7 @@ export function SiteLogo({ className, priority = false }: SiteLogoProps) {
           src="/logo-dark-v2.png"
           alt=""
           fill
-          sizes="190px"
+          sizes="(max-width: 380px) 132px, (max-width: 640px) 160px, 190px"
           priority={priority}
           className="logo-img-dark object-contain object-left"
           title={`${SITE_NAME} logo`}

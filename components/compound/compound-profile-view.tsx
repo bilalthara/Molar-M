@@ -4,6 +4,7 @@ import { MassBreakdownChart } from "@/components/charts/mass-breakdown-chart";
 import { BeginnerCalculation } from "@/components/compound/beginner-calculation";
 import { CompoundActions } from "@/components/compound/compound-actions";
 import { CompoundConceptDiagram } from "@/components/compound/concept-diagram";
+import { OnThisPage } from "@/components/compound/on-this-page";
 import { CompoundPdfDownloads } from "@/components/downloads/compound-pdf-downloads";
 import { FaqAccordion } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
@@ -60,12 +61,12 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24">
-      <Card>
-        <CardHeader className="gap-2">
-          <h2 className="text-xl text-foreground sm:text-2xl">{title}</h2>
+    <section id={id} className="scroll-mt-24 min-w-0">
+      <Card className="min-w-0 overflow-hidden">
+        <CardHeader className="gap-2 px-4 pt-4 sm:px-6 sm:pt-6">
+          <h2 className="text-lg text-foreground sm:text-xl md:text-2xl">{title}</h2>
         </CardHeader>
-        <CardContent className="prose-chem space-y-4 text-[15px] leading-relaxed text-muted sm:text-base">
+        <CardContent className="prose-chem space-y-4 px-4 pb-4 pt-3 text-[15px] leading-relaxed text-muted sm:px-6 sm:pb-6 sm:pt-4 sm:text-base">
           {children}
         </CardContent>
       </Card>
@@ -93,8 +94,8 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
                   : "/compounds";
 
   return (
-    <article className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-muted">
+    <article className="mx-auto w-full max-w-6xl min-w-0 px-4 py-6 sm:px-6 sm:py-10">
+      <nav aria-label="Breadcrumb" className="mb-5 text-sm text-muted sm:mb-6">
         <ol className="flex flex-wrap items-center gap-1.5">
           <li>
             <Link href="/" className="no-underline hover:text-brand">
@@ -108,11 +109,14 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
             </Link>
           </li>
           <li aria-hidden>/</li>
-          <li className="text-foreground">{profile.name}</li>
+          <li className="min-w-0 break-words text-foreground">{profile.name}</li>
         </ol>
       </nav>
 
-      <header id="answer" className="animate-rise scroll-mt-24 rounded-3xl border border-border bg-surface p-5 shadow-[var(--shadow)] sm:p-8">
+      <header
+        id="answer"
+        className="animate-rise scroll-mt-24 rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow)] sm:rounded-3xl sm:p-8"
+      >
         <div className="flex flex-wrap gap-2">
           <Badge tone="brand">{categoryLabel(profile.category)}</Badge>
           {profile.categories
@@ -121,12 +125,12 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
               <Badge key={c}>{categoryLabel(c)}</Badge>
             ))}
         </div>
-        <h1 className="mt-4 text-3xl text-foreground sm:text-4xl md:text-5xl">
+        <h1 className="mt-3 text-[1.65rem] leading-tight text-foreground sm:mt-4 sm:text-4xl md:text-5xl">
           Molar Mass of {profile.name} (<Formula value={profile.formula} />)
         </h1>
-        <p className="mt-3 text-lg text-muted">
+        <p className="mt-3 text-base text-muted sm:text-lg">
           Learn how chemists calculate the molar mass of {profile.name} (
-          <Formula value={profile.formula} className="text-xl font-semibold text-foreground" />
+          <Formula value={profile.formula} className="font-semibold text-foreground sm:text-xl" />
           ), with a clear formula breakdown, worked steps, and study notes
           {profile.iupacName !== profile.name ? (
             <span>
@@ -137,12 +141,12 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
           .
         </p>
 
-        <div className="mt-6 rounded-2xl border border-brand/25 bg-brand-soft/50 p-4 dark:bg-brand-soft/20 sm:p-5">
+        <div className="mt-5 rounded-2xl border border-brand/25 bg-brand-soft/50 p-4 dark:bg-brand-soft/20 sm:mt-6 sm:p-5">
           <p className="text-sm font-medium text-muted">Quick answer</p>
           <p className="mt-1 text-foreground">
             The molar mass of {profile.name} (<Formula value={profile.formula} />) is
           </p>
-          <p className="mt-2 font-mono text-4xl font-semibold tracking-tight text-brand sm:text-5xl">
+          <p className="mt-2 break-words font-mono text-3xl font-semibold tracking-tight text-brand sm:text-4xl md:text-5xl">
             {calculation.molarMass.toFixed(3)}
             <span className="ml-2 text-base font-medium text-muted">g/mol</span>
           </p>
@@ -152,7 +156,7 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
           </p>
         </div>
 
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
           <CompoundActions
             name={profile.name}
             formula={profile.formula}
@@ -167,21 +171,21 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
         </div>
 
         {(profile.casNumber || profile.pubchemCid || profile.smiles) && (
-          <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-3">
+          <dl className="mt-5 grid grid-cols-1 gap-3 text-sm md:mt-6 md:grid-cols-3">
             {profile.casNumber ? (
-              <div className="rounded-xl bg-surface-2 px-3 py-2">
+              <div className="min-w-0 rounded-xl bg-surface-2 px-3 py-2">
                 <dt className="text-muted">CAS Registry Number</dt>
-                <dd className="font-medium text-foreground">{profile.casNumber}</dd>
+                <dd className="break-all font-medium text-foreground">{profile.casNumber}</dd>
               </div>
             ) : null}
             {profile.pubchemCid ? (
-              <div className="rounded-xl bg-surface-2 px-3 py-2">
+              <div className="min-w-0 rounded-xl bg-surface-2 px-3 py-2">
                 <dt className="text-muted">PubChem CID</dt>
-                <dd className="font-medium text-foreground">{profile.pubchemCid}</dd>
+                <dd className="break-all font-medium text-foreground">{profile.pubchemCid}</dd>
               </div>
             ) : null}
             {profile.smiles ? (
-              <div className="rounded-xl bg-surface-2 px-3 py-2">
+              <div className="min-w-0 rounded-xl bg-surface-2 px-3 py-2">
                 <dt className="text-muted">SMILES</dt>
                 <dd className="break-all font-mono text-foreground">{profile.smiles}</dd>
               </div>
@@ -190,23 +194,10 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
         )}
       </header>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
-        <aside className="no-print lg:sticky lg:top-24 lg:self-start">
-          <nav aria-label="On this page" className="rounded-2xl border border-border bg-surface p-4">
-            <p className="text-xs font-semibold tracking-wide text-muted uppercase">On this page</p>
-            <ul className="mt-3 max-h-[70vh] space-y-1.5 overflow-y-auto pr-1">
-              {toc.map((item) => (
-                <li key={item.id}>
-                  <a href={`#${item.id}`} className="text-sm text-muted no-underline hover:text-brand">
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </aside>
+      <div className="mt-6 grid min-w-0 gap-6 sm:mt-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
+        <OnThisPage items={toc} />
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-5 sm:space-y-6">
           <Section id="calculation" title="Step-by-step calculation">
             <BeginnerCalculation
               name={profile.name}
@@ -346,8 +337,8 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
           <Section id="reactions" title={`Important reactions of ${profile.name}`}>
             <div className="space-y-4">
               {profile.reactions.map((reaction) => (
-                <div key={reaction.equation} className="rounded-2xl border border-border bg-surface-2/60 p-4">
-                  <p className="text-base font-semibold text-foreground">
+                <div key={reaction.equation} className="min-w-0 rounded-2xl border border-border bg-surface-2/60 p-3 sm:p-4">
+                  <p className="break-words text-base font-semibold text-foreground">
                     <Formula value={reaction.equation} />
                   </p>
                   <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
@@ -456,10 +447,10 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
                   <li key={item.slug}>
                     <Link
                       href={compoundHref(item.slug)}
-                      className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3 no-underline hover:border-brand"
+                      className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-border px-3 py-3 no-underline hover:border-brand sm:px-4"
                     >
-                      <span className="font-semibold text-foreground">{item.name}</span>
-                      <Formula value={item.formula} className="text-muted" />
+                      <span className="min-w-0 break-words font-semibold text-foreground">{item.name}</span>
+                      <Formula value={item.formula} className="shrink-0 text-muted" />
                     </Link>
                   </li>
                 ))}
@@ -524,14 +515,16 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
 function PropertyTable({ title, rows }: { title: string; rows: [string, string | undefined][] }) {
   const filled = rows.filter(([, value]) => Boolean(value));
   return (
-    <div>
+    <div className="min-w-0">
       <h3 className="mb-2 text-base font-semibold text-foreground">{title}</h3>
       <Table>
         <TableBody>
           {filled.map(([label, value]) => (
             <TableRow key={label}>
-              <TableCell className="w-40 font-medium text-foreground">{label}</TableCell>
-              <TableCell>{value}</TableCell>
+              <TableCell className="w-[34%] max-w-[9rem] font-medium text-foreground sm:w-40 sm:max-w-none">
+                {label}
+              </TableCell>
+              <TableCell className="min-w-0 break-words">{value}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -18,10 +18,10 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/85 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-3 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 w-full min-w-0 max-w-6xl items-center gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
         <SiteLogo priority />
 
-        <nav className="ml-2 hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="ml-2 hidden min-w-0 items-center gap-1 lg:flex" aria-label="Primary">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -33,7 +33,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1.5">
           <Button
             type="button"
             variant="ghost"

@@ -66,9 +66,9 @@ export function BeginnerCalculation({
           Why multiply? If one oxygen atom &quot;costs&quot; about 16 g/mol, then two oxygen atoms cost twice as much.
           Each element&apos;s contribution is: number of atoms × atomic mass.
         </p>
-        <ul className="mt-3 list-disc space-y-1 pl-5 font-mono text-sm text-foreground sm:text-base">
+        <ul className="mt-3 list-disc space-y-1 pl-5 font-mono text-[13px] leading-relaxed text-foreground sm:text-base">
           {calculation.breakdown.map((row) => (
-            <li key={`mul-${row.element}`}>
+            <li key={`mul-${row.element}`} className="break-words">
               {row.count} × {row.atomicMass.toFixed(3)} = <strong>{row.contribution.toFixed(3)} g/mol</strong> (
               {elementName(row.element)})
             </li>
@@ -82,7 +82,7 @@ export function BeginnerCalculation({
           Why add? The molar mass of the whole compound is simply the total mass of every atom in the formula. Add
           each element&apos;s contribution:
         </p>
-        <p className="mt-3 font-mono text-sm text-foreground sm:text-base">
+        <p className="mt-3 break-all font-mono text-[13px] leading-relaxed text-foreground sm:text-base">
           {calculation.breakdown.map((row) => row.contribution.toFixed(3)).join(" + ")} ={" "}
           <strong>{calculation.molarMass.toFixed(3)} g/mol</strong>
         </p>

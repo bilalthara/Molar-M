@@ -105,7 +105,7 @@ export default function CalculatorPage() {
           faqSchema(calculatorFaq),
         ]}
       />
-      <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
+      <main className="mx-auto w-full min-w-0 max-w-4xl px-4 py-8 sm:px-6 sm:py-14">
         <header className="mb-8">
           <h1 className="text-4xl text-foreground sm:text-5xl">Molar Mass Calculator</h1>
           <p className="mt-3 max-w-3xl text-lg text-muted">

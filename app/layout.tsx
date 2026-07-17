@@ -63,10 +63,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${dmSans.variable} ${sourceSerif.variable} ${jetbrains.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col bg-background text-foreground">
+      <body className="flex min-h-full max-w-[100vw] flex-col overflow-x-clip bg-background text-foreground">
         <ThemeProvider>
           <SiteHeader />
-          <div className="min-w-0 flex-1">{children}</div>
+          <div className="min-w-0 max-w-full flex-1">{children}</div>
           <SiteFooter />
         </ThemeProvider>
       </body>

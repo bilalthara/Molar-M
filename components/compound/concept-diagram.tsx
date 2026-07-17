@@ -16,7 +16,7 @@ export function CompoundConceptDiagram({ profile }: { profile: CompoundProfile }
 
 function Frame({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <figure className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
+    <figure className="max-w-full overflow-hidden rounded-2xl border border-border bg-surface p-3 sm:p-5">
       <figcaption className="mb-3 text-sm font-semibold text-foreground">{title}</figcaption>
       {children}
     </figure>

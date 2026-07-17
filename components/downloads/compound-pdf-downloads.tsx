@@ -19,7 +19,7 @@ type CompoundPdfDownloadsProps = {
 
 export function CompoundPdfDownloads({ profile, calculation }: CompoundPdfDownloadsProps) {
   return (
-    <div className="no-print flex flex-wrap gap-2">
+    <div className="no-print flex w-full max-w-full flex-wrap gap-2">
       <Button type="button" variant="outline" size="sm" onClick={() => downloadCompoundSummary(profile, calculation)}>
         <Download className="h-4 w-4" aria-hidden />
         Download summary PDF

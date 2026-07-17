@@ -22,7 +22,53 @@ export function PeriodicTableGrid() {
 
   return (
     <div className="space-y-6">
-      <div className="overflow-x-auto pb-2">
+      {/* Mobile: vertical list — no horizontal scroll */}
+      <div className="md:hidden">
+        <label htmlFor="periodic-element-select" className="mb-2 block text-sm font-semibold text-foreground">
+          Choose an element
+        </label>
+        <select
+          id="periodic-element-select"
+          className="mb-4 h-12 w-full rounded-xl border border-border bg-surface px-3 text-base text-foreground"
+          value={selected?.symbol ?? ""}
+          onChange={(event) => {
+            const next = periodicElements.find((el) => el.symbol === event.target.value) ?? null;
+            setSelected(next);
+          }}
+        >
+          {periodicElements.map((element) => (
+            <option key={element.symbol} value={element.symbol}>
+              {element.atomicNumber}. {element.name} ({element.symbol}) — {element.molarMass}
+            </option>
+          ))}
+        </select>
+        <ul className="max-h-[22rem] space-y-1 overflow-y-auto rounded-2xl border border-border p-2">
+          {periodicElements.map((element) => (
+            <li key={element.symbol}>
+              <button
+                type="button"
+                className={cn(
+                  "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left",
+                  selected?.symbol === element.symbol ? "bg-brand-soft text-foreground" : "hover:bg-surface-2",
+                )}
+                onClick={() => setSelected(element)}
+                aria-pressed={selected?.symbol === element.symbol}
+              >
+                <span className="min-w-0">
+                  <span className="font-semibold text-foreground">
+                    {element.symbol}
+                    <span className="ml-2 font-normal text-muted">{element.name}</span>
+                  </span>
+                </span>
+                <span className="shrink-0 font-mono text-sm text-muted">{element.molarMass}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Desktop / tablet: classic grid */}
+      <div className="hidden overflow-x-auto pb-2 md:block">
         <div
           className="grid min-w-[720px] gap-1"
           style={{ gridTemplateColumns: "repeat(18, minmax(0, 1fr))" }}
@@ -53,12 +99,12 @@ export function PeriodicTableGrid() {
       </div>
 
       {selected ? (
-        <div className="rounded-2xl border border-border bg-surface p-5">
+        <div className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
           <p className="text-sm text-muted">Selected element</p>
-          <h2 className="mt-1 text-2xl text-foreground">
+          <h2 className="mt-1 text-2xl text-foreground break-words">
             {selected.name} ({selected.symbol})
           </h2>
-          <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-4">
+          <dl className="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 md:grid-cols-4">
             <div>
               <dt className="text-muted">Atomic number</dt>
               <dd className="font-semibold">{selected.atomicNumber}</dd>

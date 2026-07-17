@@ -38,7 +38,7 @@ export function CompoundActions({ name, formula, molarMass }: CompoundActionsPro
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex w-full max-w-full flex-wrap gap-2">
       <Button type="button" variant="outline" size="sm" onClick={copy} aria-label="Copy molar mass result">
         {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
         {copied ? "Copied" : "Copy result"}

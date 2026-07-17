@@ -1,9 +1,16 @@
 import { cn } from "@/lib/utils";
 
+/** Scroll-safe data table: wraps on small screens instead of forcing page overflow. */
 export function Table({ className, ...props }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="w-full overflow-x-auto rounded-xl border border-border">
-      <table className={cn("w-full min-w-[28rem] border-collapse text-left text-sm", className)} {...props} />
+    <div className="w-full max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-border [-webkit-overflow-scrolling:touch]">
+      <table
+        className={cn(
+          "w-full min-w-0 border-collapse text-left text-sm md:min-w-[28rem]",
+          className,
+        )}
+        {...props}
+      />
     </div>
   );
 }
@@ -22,10 +29,18 @@ export function TableRow({ className, ...props }: React.HTMLAttributes<HTMLTable
 
 export function TableHead({ className, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <th className={cn("px-3 py-3 font-semibold whitespace-nowrap sm:px-4", className)} {...props} />
+    <th
+      className={cn(
+        "px-2 py-2.5 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm md:whitespace-nowrap",
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
 export function TableCell({ className, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className={cn("px-3 py-3 align-middle sm:px-4", className)} {...props} />;
+  return (
+    <td className={cn("max-w-[11rem] px-2 py-2.5 align-middle break-words sm:max-w-none sm:px-4 sm:py-3", className)} {...props} />
+  );
 }

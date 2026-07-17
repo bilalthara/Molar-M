@@ -47,19 +47,19 @@ export function HomePage() {
   return (
     <main>
       <section className="hero-atmosphere border-b border-border">
-        <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div>
+        <div className="mx-auto grid w-full min-w-0 max-w-6xl gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="min-w-0">
             <p className="animate-rise text-sm font-semibold tracking-[0.14em] text-brand uppercase">
               {SITE_NAME}
             </p>
-            <h1 className="animate-rise delay-1 mt-4 max-w-xl text-4xl text-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="animate-rise delay-1 mt-3 max-w-xl text-[1.75rem] leading-tight text-foreground sm:mt-4 sm:text-5xl lg:text-6xl">
               Molar mass calculator and chemistry learning platform
             </h1>
-            <p className="animate-rise delay-2 mt-5 max-w-lg text-lg text-muted">
+            <p className="animate-rise delay-2 mt-4 max-w-lg text-base text-muted sm:mt-5 sm:text-lg">
               Calculate molar mass from any chemical formula, then explore clear explanations, properties, reactions,
               and practice for the compounds you study most.
             </p>
-            <div className="animate-rise delay-3 mt-8 flex flex-wrap gap-3">
+            <div className="animate-rise delay-3 mt-6 flex flex-wrap gap-3 sm:mt-8">
               <Link href="/calculator" className={cn(buttonVariants({ size: "lg" }), "no-underline")}>
                 Open calculator
               </Link>
@@ -170,44 +170,68 @@ export function HomePage() {
           title="Popular chemical compounds"
           description="Browse compounds frequently studied in chemistry courses, laboratories, research, and industrial applications."
         />
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
-          <table className="w-full min-w-[36rem] text-left text-sm">
-            <thead className="bg-surface-2 text-muted">
-              <tr>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Compound
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Formula
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Molar mass
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold">
-                  Category
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border bg-surface">
-              {popular.map((profile) => {
-                const mass = calculateMolarMass(profile.formula)?.molarMass;
-                return (
-                  <tr key={profile.slug} className="hover:bg-surface-2/70">
-                    <td className="px-4 py-3">
-                      <Link href={compoundHref(profile.slug)} className="font-semibold no-underline">
-                        {profile.name}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3">
+        <div className="mt-6 md:hidden">
+          <ul className="divide-y divide-border rounded-2xl border border-border bg-surface">
+            {popular.map((profile) => {
+              const mass = calculateMolarMass(profile.formula)?.molarMass;
+              return (
+                <li key={profile.slug}>
+                  <Link
+                    href={compoundHref(profile.slug)}
+                    className="flex flex-col gap-1 px-4 py-3.5 no-underline"
+                  >
+                    <span className="font-semibold text-foreground">{profile.name}</span>
+                    <span className="text-sm text-muted">
                       <Formula value={profile.formula} />
-                    </td>
-                    <td className="px-4 py-3 font-mono">{mass ? formatMolarMass(mass) : "—"}</td>
-                    <td className="px-4 py-3 text-muted">{categoryLabel(profile.category)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      {mass ? ` · ${formatMolarMass(mass)}` : null}
+                      <span className="text-muted"> · {categoryLabel(profile.category)}</span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="mt-6 hidden overflow-hidden rounded-2xl border border-border md:block">
+          <div className="w-full max-w-full overflow-x-auto">
+            <table className="w-full min-w-0 text-left text-sm lg:min-w-[36rem]">
+              <thead className="bg-surface-2 text-muted">
+                <tr>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Compound
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Formula
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Molar mass
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    Category
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border bg-surface">
+                {popular.map((profile) => {
+                  const mass = calculateMolarMass(profile.formula)?.molarMass;
+                  return (
+                    <tr key={profile.slug} className="hover:bg-surface-2/70">
+                      <td className="px-4 py-3">
+                        <Link href={compoundHref(profile.slug)} className="font-semibold no-underline">
+                          {profile.name}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3">
+                        <Formula value={profile.formula} />
+                      </td>
+                      <td className="px-4 py-3 font-mono">{mass ? formatMolarMass(mass) : "—"}</td>
+                      <td className="px-4 py-3 text-muted">{categoryLabel(profile.category)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 

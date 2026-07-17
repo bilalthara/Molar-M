@@ -45,7 +45,7 @@ export function MassBreakdownChart({
   });
 
   return (
-    <figure className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
+    <figure className="max-w-full overflow-hidden rounded-2xl border border-border bg-surface p-3 sm:p-5">
       <figcaption className="mb-3 text-sm font-semibold text-foreground">{title}</figcaption>
       <svg
         viewBox={`0 0 ${width} ${height}`}
