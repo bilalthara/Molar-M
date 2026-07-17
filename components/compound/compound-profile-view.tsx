@@ -61,7 +61,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24 min-w-0">
+    <section id={id} className="scroll-mt-20 min-w-0 sm:scroll-mt-24">
       <Card className="min-w-0 overflow-hidden">
         <CardHeader className="gap-2 px-4 pt-4 sm:px-6 sm:pt-6">
           <h2 className="text-lg text-foreground sm:text-xl md:text-2xl">{title}</h2>
@@ -115,7 +115,7 @@ export function CompoundProfileView({ profile, calculation }: CompoundProfileVie
 
       <header
         id="answer"
-        className="animate-rise scroll-mt-24 rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow)] sm:rounded-3xl sm:p-8"
+        className="animate-rise scroll-mt-20 rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow)] sm:scroll-mt-24 sm:rounded-3xl sm:p-8"
       >
         <div className="flex flex-wrap gap-2">
           <Badge tone="brand">{categoryLabel(profile.category)}</Badge>

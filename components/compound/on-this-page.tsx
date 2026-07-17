@@ -11,13 +11,27 @@ type OnThisPageProps = {
   items: TocItem[];
 };
 
+const COLLAPSE_MS = 220;
+
+function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  window.history.pushState(null, "", `#${id}`);
+}
+
 /** Desktop: sticky sidebar. Mobile: compact accordion, collapsed by default. */
 export function OnThisPage({ items }: OnThisPageProps) {
   const panelId = useId();
   const [open, setOpen] = useState(false);
 
-  function handleNavigate() {
+  function handleNavigate(event: React.MouseEvent<HTMLAnchorElement>, id: string) {
+    event.preventDefault();
+    // Collapse first so layout height settles, then scroll to the real position.
     setOpen(false);
+    window.setTimeout(() => {
+      scrollToSection(id);
+    }, COLLAPSE_MS);
   }
 
   return (
@@ -59,7 +73,7 @@ export function OnThisPage({ items }: OnThisPageProps) {
                   <a
                     href={`#${item.id}`}
                     className="block rounded-lg px-3 py-2.5 text-sm text-muted no-underline hover:bg-surface-2 hover:text-foreground"
-                    onClick={handleNavigate}
+                    onClick={(event) => handleNavigate(event, item.id)}
                   >
                     {item.label}
                   </a>
