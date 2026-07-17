@@ -59,17 +59,15 @@ export function SiteHeader() {
           >
             Calculator
           </Link>
-          <Button
+          <button
             type="button"
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-muted transition-colors hover:bg-surface-2 hover:text-foreground lg:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
           >
             {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
-          </Button>
+          </button>
         </div>
       </div>
 
