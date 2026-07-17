@@ -1,44 +1,53 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { PrimaryHeader } from "@/components/layout/primary-header";
-import { SITE_URL } from "@/lib/site-config";
-import { SecondaryHeader } from "@/components/layout/secondary-header";
-import { SiteFooter } from "@/components/layout/site-footer";
+import { DM_Sans, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 
-const geistSans = Geist({
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site-config";
+
+import "./globals.css";
+
+const dmSans = DM_Sans({
   display: "swap",
-  variable: "--font-geist-sans",
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const sourceSerif = Source_Serif_4({
   display: "swap",
-  variable: "--font-geist-mono",
+  variable: "--font-source-serif",
+  subsets: ["latin"],
+});
+
+const jetbrains = JetBrains_Mono({
+  display: "swap",
+  variable: "--font-jetbrains",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Molar Mass Calculator & Compound Database",
-    template: "%s | MolarMass",
+    default: "Molar Mass Calculator & Chemistry Guides | Molar Mass Lab",
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Premium molar mass calculator and compound knowledge base with structured chemistry data, step-by-step calculations, and internal linking for fast navigation.",
+  description: SITE_DESCRIPTION,
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Molar Mass Calculator & Compound Database",
-    description: "Compute molar mass quickly and explore structured compound pages.",
+    title: "Molar Mass Calculator & Chemistry Guides | Molar Mass Lab",
+    description: SITE_DESCRIPTION,
     url: "/",
-    siteName: "MolarMass",
+    siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
+    images: [{ url: "/logo-light-v2.png", width: 944, height: 179, alt: `${SITE_NAME} logo` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Molar Mass Calculator & Compound Database",
-    description: "Fast chemistry answers with premium UX and structured pages.",
+    title: "Molar Mass Calculator & Chemistry Guides | Molar Mass Lab",
+    description: SITE_DESCRIPTION,
+    images: ["/logo-light-v2.png"],
   },
   icons: {
     icon: [{ url: "/Favicon-v2.webp", type: "image/webp", sizes: "any" }],
@@ -47,21 +56,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${sourceSerif.variable} ${jetbrains.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full bg-white text-base text-[#0a0f1a]">
-        <PrimaryHeader />
-        <SecondaryHeader />
-        <div className="min-w-0 flex-1">{children}</div>
-        <SiteFooter />
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        <ThemeProvider>
+          <SiteHeader />
+          <div className="min-w-0 flex-1">{children}</div>
+          <SiteFooter />
+        </ThemeProvider>
       </body>
     </html>
   );

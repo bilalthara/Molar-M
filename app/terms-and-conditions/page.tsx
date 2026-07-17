@@ -14,14 +14,12 @@ export const metadata: Metadata = {
 
 export default function TermsAndConditionsPage() {
   return (
-    <main className="bg-white px-4 pt-6 sm:pt-8 pb-12 text-[#0a0f1a] sm:px-6">
-      <div className="mx-auto w-full max-w-4xl space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Terms &amp; Conditions</h1>
-        <p className="text-sm leading-relaxed text-[#0a0f1a]/85">
+    <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <h1 className="text-4xl text-foreground sm:text-5xl">Terms &amp; Conditions</h1>
+        <p className="mt-4 text-muted">
           This website is provided for educational use. You agree to use Molar Mass Lab responsibly and verify outputs
           before high-stakes academic or laboratory decisions.
         </p>
-      </div>
-    </main>
+      </main>
   );
 }

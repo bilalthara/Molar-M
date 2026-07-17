@@ -1,30 +1,50 @@
+"use client";
+
+import { useId, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-type Item = {
-  question: string;
-  answer: string;
-};
+import { cn } from "@/lib/utils";
 
-type FaqAccordionProps = {
-  items: Item[];
-};
+type FaqItem = { question: string; answer: string };
 
-export function FaqAccordion({ items }: FaqAccordionProps) {
+export function FaqAccordion({ items }: { items: FaqItem[] }) {
+  const baseId = useId();
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
   return (
-    <div className="space-y-2.5">
+    <div className="divide-y divide-border rounded-2xl border border-border bg-surface">
       {items.map((item, index) => {
+        const open = openIndex === index;
+        const panelId = `${baseId}-panel-${index}`;
+        const buttonId = `${baseId}-button-${index}`;
         return (
-          <details
-            key={item.question}
-            className="group rounded-lg border border-black/5 bg-white transition-colors duration-150"
-            open={index === 0}
-          >
-            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-left text-base font-medium text-[#0F172A] transition-colors duration-150 hover:text-[#0F766E] [&::-webkit-details-marker]:hidden">
-              {item.question}
-              <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-            </summary>
-            <div className="border-t border-slate-100 px-4 py-3 text-base leading-7 text-[#0F172A]">{item.answer}</div>
-          </details>
+          <div key={item.question}>
+            <h3 className="m-0 text-base font-semibold">
+              <button
+                type="button"
+                id={buttonId}
+                className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left text-foreground sm:px-5"
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => setOpenIndex(open ? null : index)}
+              >
+                <span>{item.question}</span>
+                <ChevronDown
+                  className={cn("h-5 w-5 shrink-0 text-muted transition-transform", open && "rotate-180")}
+                  aria-hidden
+                />
+              </button>
+            </h3>
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              hidden={!open}
+              className={cn("px-4 pb-4 text-muted sm:px-5", !open && "hidden")}
+            >
+              <p>{item.answer}</p>
+            </div>
+          </div>
         );
       })}
     </div>

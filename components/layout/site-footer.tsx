@@ -1,86 +1,89 @@
-import Image from "next/image";
 import Link from "next/link";
+
+import { CATEGORY_LINKS, SITE_NAME, SITE_TAGLINE } from "@/lib/site-config";
+
+const learnLinks = [
+  { href: "/learn/what-is-molar-mass", label: "What is molar mass?" },
+  { href: "/learn/how-to-calculate-molar-mass", label: "How to calculate" },
+  { href: "/learn/stoichiometry-basics", label: "Stoichiometry basics" },
+  { href: "/practice", label: "Practice worksheets" },
+];
+
+const toolLinks = [
+  { href: "/calculator", label: "Molar mass calculator" },
+  { href: "/periodic-table", label: "Periodic table" },
+  { href: "/compounds", label: "Compound library" },
+  { href: "/reference", label: "Reference tables" },
+];
+
+const legalLinks = [
+  { href: "/about-us", label: "About" },
+  { href: "/how-we-calculate", label: "How we calculate" },
+  { href: "/editorial-policy", label: "Editorial" },
+  { href: "/accuracy", label: "Accuracy" },
+  { href: "/contact-us", label: "Contact" },
+  { href: "/privacy-policy", label: "Privacy" },
+  { href: "/terms-and-conditions", label: "Terms" },
+];
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-slate-200 bg-white">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
-        <div>
-          <Link
-            className="inline-flex cursor-pointer items-center rounded-md outline-offset-2 transition-opacity duration-150 hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0F766E]"
-            href="/"
-            prefetch={false}
-          >
-            <Image
-              alt="MolarMass logo"
-              className="h-7 w-auto object-contain"
-              height={28}
-              src="/molar-mass-lab-logo-v2.webp"
-              width={140}
-            />
-          </Link>
-          <p className="mt-2 text-sm text-[#0a0f1a]/85">
-            Trusted molar mass data and compound intelligence for students, labs, and professionals.
+    <footer className="mt-auto border-t border-border bg-surface">
+      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="lg:col-span-1">
+          <p className="font-[family-name:var(--font-source-serif)] text-xl font-semibold text-foreground">
+            {SITE_NAME}
           </p>
+          <p className="mt-3 text-sm text-muted">{SITE_TAGLINE}</p>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-[#0a0f1a]">Legal</h4>
-          <ul className="mt-2 space-y-2 text-sm text-[#0a0f1a]/85">
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/privacy-policy">
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/terms-and-conditions">
-                Terms &amp; Conditions
-              </Link>
-            </li>
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/disclaimer">
-                Disclaimer
-              </Link>
-            </li>
+          <p className="text-sm font-semibold text-foreground">Tools</p>
+          <ul className="mt-3 space-y-2">
+            {toolLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-sm text-muted no-underline hover:text-brand">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-[#0a0f1a]">Company</h4>
-          <ul className="mt-2 space-y-2 text-sm text-[#0a0f1a]/85">
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/about-us">
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/contact-us">
-                Contact Us
-              </Link>
-            </li>
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/cookie-policy">
-                Cookie Policy
-              </Link>
-            </li>
+          <p className="text-sm font-semibold text-foreground">Learn</p>
+          <ul className="mt-3 space-y-2">
+            {learnLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-sm text-muted no-underline hover:text-brand">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-[#0a0f1a]">Guides</h4>
-          <ul className="mt-2 space-y-2 text-sm text-[#0a0f1a]/85">
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/stoichiometry-guide">
-                Stoichiometry Guide
-              </Link>
-            </li>
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/mole-conversion-guide">
-                Mole Conversion Guide
-              </Link>
-            </li>
-            <li>
-              <Link className="transition-colors duration-200 hover:text-[#0F766E]" href="/lab-prep-guide">
-                Lab Prep Guide
-              </Link>
-            </li>
+          <p className="text-sm font-semibold text-foreground">Categories</p>
+          <ul className="mt-3 space-y-2">
+            {CATEGORY_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-sm text-muted no-underline hover:text-brand">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-border">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-5 text-sm text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <p>© {new Date().getFullYear()} {SITE_NAME}. Built for chemistry education.</p>
+          <ul className="flex flex-wrap gap-4">
+            {legalLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="no-underline hover:text-brand">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

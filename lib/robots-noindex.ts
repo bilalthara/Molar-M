@@ -1,11 +1,5 @@
-import type { Metadata } from "next";
-
-/** Use on legal, policy, and company pages that should not appear in search indexes. */
-export const robotsNoIndex: NonNullable<Metadata["robots"]> = {
+/** Shared robots directive for legal/utility pages that should not compete for rankings. */
+export const robotsNoIndex = {
   index: false,
   follow: true,
-  googleBot: {
-    index: false,
-    follow: true,
-  },
-};
+} as const;

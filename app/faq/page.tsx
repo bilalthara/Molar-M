@@ -1,36 +1,52 @@
-export const dynamic = "force-static";
-export const revalidate = false;
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
 import { FaqAccordion } from "@/components/ui/accordion";
-import { extendedFaq } from "@/lib/home-faq";
 
 export const metadata: Metadata = {
   title: "FAQ",
-  description: "Common questions about the molar mass calculator and compound pages.",
+  description: "Answers about the molar mass calculator, compound profiles, and how Molar Mass Lab teaches chemistry.",
   alternates: { canonical: "/faq" },
 };
 
+const faq = [
+  {
+    question: "How accurate is the molar mass calculator?",
+    answer:
+      "The calculator uses standard atomic masses and expands parentheses correctly. Classroom answers may differ slightly depending on the periodic table values your course requires.",
+  },
+  {
+    question: "Which compounds have full study pages?",
+    answer:
+      "Fifty commonly studied compounds have full pages covering calculation steps, properties, reactions, safety, and practice. For any other formula, use the calculator to get the molar mass instantly.",
+  },
+  {
+    question: "Can I search by IUPAC name or synonym?",
+    answer:
+      "Yes. Instant search matches common names, IUPAC names, aliases, and formulas. Keyboard navigation is supported in the search dropdown.",
+  },
+  {
+    question: "Where should I start if I’m new to molar mass?",
+    answer:
+      "Begin with the What Is Molar Mass guide, then try the water worked example on the homepage and open the water compound profile for practice questions.",
+  },
+  {
+    question: "Do you support dark mode?",
+    answer:
+      "Yes. Use the theme toggle in the header. Your preference is saved in the browser.",
+  },
+];
+
 export default function FaqPage() {
   return (
-    <main className="bg-white px-4 pt-6 sm:pt-8 pb-12 text-[#0a0f1a] sm:px-6">
-      <div className="mx-auto w-full max-w-6xl">
-        <h1 className="text-3xl font-bold tracking-tight text-[#0a0f1a] sm:text-4xl">FAQ</h1>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#0a0f1a]/85">
-          Comprehensive answers about calculations, guides, and how to use Molar Mass Lab effectively.
-        </p>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#0a0f1a]/85">
-          For the calculator and compound hub, open{" "}
-          <Link className="text-[#0F766E] underline-offset-2 hover:underline" href="/" prefetch={false}>
-            molar mass
-          </Link>{" "}
-          on the molar mass page.
-        </p>
-        <div className="mt-8 max-w-3xl border-t border-slate-200/90 pt-8">
-          <FaqAccordion items={extendedFaq} />
-        </div>
+    <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <h1 className="text-4xl text-foreground sm:text-5xl">FAQ</h1>
+      <p className="mt-3 text-lg text-muted">
+        Quick answers about calculations, profiles, and learning resources. Prefer hands-on practice? Open the{" "}
+        <Link href="/calculator">calculator</Link> or <Link href="/practice">practice hub</Link>.
+      </p>
+      <div className="mt-8">
+        <FaqAccordion items={faq} />
       </div>
     </main>
   );
